@@ -1,7 +1,10 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Alert, Animated, Image, Linking, Modal, Platform, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Animated, Image, Linking, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useRecoilState } from "recoil";
+
+import { hereAtom } from "../utils/states";
 
 import { SvgIcon, BlackModal, TransparentModal } from "@/components";
 import { Colors } from "@/styles/colors";
@@ -111,10 +114,6 @@ const Select = () => {
   const [timeModalVisiable, setTimeModalVisiable] = useState(false);
   const [findData, setFindData] = useRecoilState(findDataAtom);
 
-  useEffect(() => {
-    console.log(findData);
-  }, [findData]);
-
   const onLayout = (event) => {
     const { width } = event.nativeEvent.layout;
     setViewSize(Number(width * 0.5 - 8));
@@ -126,72 +125,102 @@ const Select = () => {
       <SelectDateModals visible={dateModalVisiable} setVisible={setDateModalVisiable} type="date" />
       <SelectDateModals visible={timeModalVisiable} setVisible={setTimeModalVisiable} type="time" />
       <SelectButton />
-      <SelectBox
-        title="출발지"
-        text={findData.departure.displayName || "출발지를 선택해주세요."}
-        icon="LineStartCircle"
-        onPress={() => {
-          setStartModalVisiable(true);
-        }}
-      />
-      <SelectBox
-        title="도착지"
-        text={findData.destination.displayName || "도착지를 선택해주세요."}
-        icon="LineStartCircle"
-        iconStyle={{
-          transform: [{ rotate: "180deg" }],
-        }}
-        onPress={() => {
-          setEndModalVisiable(true);
-        }}
-      />
-      <View style={styles.selectWhen} onLayout={onLayout}>
+      <ScrollView style={{ height: 10 }}>
         <SelectBox
-          title="출발 날짜"
-          text={`${findData.date.month}월 ${findData.date.day}일`}
-          style={{ width: viewSize, marginRight: 8 }}
-          icon="CalendarToday"
+          title="출발지"
+          text={findData.departure.displayName || "출발지를 선택해주세요."}
+          icon="LineStartCircle"
           onPress={() => {
-            setDateModalVisiable(true);
+            setStartModalVisiable(true);
           }}
         />
         <SelectBox
-          title="출발 시간"
-          text={`${findData.date.hour}시 ${findData.date.minute}분`}
-          style={{ width: viewSize, marginLeft: 8 }}
-          icon="AvgPace"
+          title="도착지"
+          text={findData.destination.displayName || "도착지를 선택해주세요."}
+          icon="LineStartCircle"
+          iconStyle={{
+            transform: [{ rotate: "180deg" }],
+          }}
           onPress={() => {
-            setTimeModalVisiable(true);
+            setEndModalVisiable(true);
           }}
         />
-      </View>
-      <TouchableOpacity style={styles.selectNextButton}>
-        <Text style={styles.selectNextButtonText}>다음</Text>
-      </TouchableOpacity>
+        <View style={styles.selectWhen} onLayout={onLayout}>
+          <SelectBox
+            title="출발 날짜"
+            text={`${findData.date.month}월 ${findData.date.day}일`}
+            style={{ width: viewSize, marginRight: 8 }}
+            icon="CalendarToday"
+            onPress={() => {
+              setDateModalVisiable(true);
+            }}
+          />
+          <SelectBox
+            title="출발 시간"
+            text={`${findData.date.hour}시 ${findData.date.minute}분`}
+            style={{ width: viewSize, marginLeft: 8 }}
+            icon="AvgPace"
+            onPress={() => {
+              setTimeModalVisiable(true);
+            }}
+          />
+        </View>
+        <TouchableOpacity style={styles.selectNextButton}>
+          <Text style={styles.selectNextButtonText}>다음</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 };
 const SelectWhereModals = ({ visible, setVisible, type }) => {
+  const [here, setHere] = useRecoilState(hereAtom);
   const [mapModalVisible, setMapModalVisible] = useState(false);
   const [selected, setSelected] = useState({});
   const [search, setSearch] = useState("");
-  const [searchList, setSearchList] = useState([
-    {
-      name: "한국디지털미디어고등학교",
-      address: "경기도 광명시 광명로 1",
-      m: 0,
-    },
-    {
-      name: "중앙역 4호선",
-      address: "경기 안산시 단원구 중앙대로 918 중앙역",
-      m: 2900,
-    },
-    {
-      name: "광명역 경부선(고속철도)",
-      address: "경기 광명시 광명역로 21",
-      m: 1242,
-    },
-  ]);
+  const [searchList, setSearchList] = useState([]);
+
+  useEffect(() => {
+    // console.log(search);
+    if (!search) {
+      setSearchList([]);
+      return;
+    }
+    (async () => {
+      try {
+        const res = await axios.get(`https://map.naver.com/v5/api/instantSearch?lang=ko&caller=pcweb&types=place,address&coords=${here.x},${here.y}&query=${search}`);
+        // console.log(res.data.place);
+        const list = res.data.place.map((item) => {
+          return {
+            name: item.title,
+            address: item.roadAddress || item.jibunAddress,
+            x: item.x,
+            y: item.y,
+            m: item.dist * 1000,
+          };
+        });
+        // console.log(list);
+        setSearchList(list);
+      } catch {
+        console.log("error");
+        setSearchList([]);
+      }
+    })();
+  }, [search]);
+
+  const distance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371e3; // 지구 반경 (미터)
+    const φ1 = (lat1 * Math.PI) / 180; // φ, λ을 라디안 값으로 변환
+    const φ2 = (lat2 * Math.PI) / 180;
+    const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const d = R * c; // 두 지점 간의 거리(m)
+
+    return d;
+  };
 
   const what = type === "departure" ? "출발지" : "도착지";
   return (
@@ -218,31 +247,45 @@ const SelectWhereModals = ({ visible, setVisible, type }) => {
             }}
           />
         </View>
-        {searchList.length &&
-          searchList.map((item, index) => {
-            return (
-              <SearchSelect
-                title={item.name}
-                address={item.address}
-                m={item.m}
-                onPress={() => {
-                  setSelected(item);
-                  setMapModalVisible(true);
-                }}
-                key={index}
-              />
-            );
-          })}
+        <ScrollView>
+          {searchList.length > 0 ? (
+            searchList.map((item, index) => {
+              return (
+                <SearchSelect
+                  title={item.name}
+                  address={item.address}
+                  m={distance(here.x, here.y, item.x, item.y)}
+                  // m={item.m}
+                  onPress={() => {
+                    setSelected(item);
+                    setMapModalVisible(true);
+                  }}
+                  key={index}
+                />
+              );
+            })
+          ) : (
+            <View style={styles.putSearch}>
+              <Text style={styles.putSearchText}>검색어를 입력해주세요.</Text>
+            </View>
+          )}
+        </ScrollView>
       </View>
     </BlackModal>
   );
 };
 const SelectMapModal = ({ visible, setVisible, selected, parentsSetVisible, type }) => {
   const [findData, setFindData] = useRecoilState(findDataAtom);
+  const [viewSize, setViewSize] = useState({ width: 0, height: 0 });
+
+  const onLayout = (event) => {
+    const { width, height } = event.nativeEvent.layout;
+    setViewSize({ width, height });
+  };
   return (
     <TransparentModal visible={visible} setVisible={setVisible}>
       <View style={styles.mapModal}>
-        <View style={styles.mapModalTop}>
+        <View style={styles.mapModalTop} onLayout={onLayout}>
           <View styles={styles.mapModalTopLeft}>
             <TouchableOpacity
               onPress={() => {
@@ -280,31 +323,54 @@ const SelectMapModal = ({ visible, setVisible, selected, parentsSetVisible, type
 const SelectDateModals = ({ visible, setVisible, type }) => {
   const [findData, setFindData] = useRecoilState(findDataAtom);
   const typeOrigin = type;
-  if (Platform.OS === "ios") {
-    type = "datetime";
-  }
+  const getFullDate = (date = new Date()) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return Number(`${year}${month < 10 ? `0${month}` : month}${day < 10 ? `0${day}` : day}`);
+  };
   return (
     <DateTimePickerModal
       isVisible={visible}
       mode={type}
       display={type === "date" ? "inline" : type === "time" ? "spinner" : "inline"}
+      cancelTextIOS="취소"
+      confirmTextIOS="확인"
       onConfirm={(date) => {
-        if (date.getDate() < new Date().getDate()) {
-          Alert.alert("오늘 이전 날짜는\n선택할 수 없어요 😢");
+        const newFindData = { ...findData };
+        newFindData.date = {
+          year: null,
+          month: null,
+          day: null,
+          hour: null,
+          minute: null,
+        };
+        if (typeOrigin === "date" && getFullDate(date) < getFullDate()) {
+          Alert.alert("이미 지난 날짜는\n선택할 수 없어요 😢");
           setVisible(false);
           return;
-        } else if (((Platform.OS === "android" && typeOrigin === "time") || Platform.OS === "ios") && date.getDate() === new Date().getDate() && date.getTime() < new Date().getTime()) {
+        }
+        const ifPastToday = date.getTime() < new Date().getTime() && findData.date.year === new Date().getFullYear() && findData.date.month === new Date().getMonth() + 1 && findData.date.day === new Date().getDate();
+        if (typeOrigin === "time" && ifPastToday) {
           Alert.alert("이미 지난 시간은\n선택할 수 없어요 😢");
           setVisible(false);
           return;
         }
-        const newFindData = { ...findData };
+
+        if (typeOrigin === "date" && getFullDate(date) === getFullDate() && ifPastToday) {
+          newFindData.date = {
+            ...newFindData.date,
+            hour: new Date().getHours(),
+            minute: new Date().getMinutes(),
+          };
+        }
+
         newFindData.date = {
-          year: date.getFullYear(),
-          month: date.getMonth() + 1,
-          day: date.getDate(),
-          hour: date.getHours(),
-          minute: date.getMinutes(),
+          year: newFindData.year || date.getFullYear(),
+          month: newFindData.month || date.getMonth() + 1,
+          day: newFindData.day || date.getDate(),
+          hour: newFindData.hour || date.getHours(),
+          minute: newFindData.minute || date.getMinutes(),
         };
         setFindData(newFindData);
         setVisible(false);
@@ -317,13 +383,25 @@ const SelectDateModals = ({ visible, setVisible, type }) => {
 };
 
 const SearchSelect = ({ onPress, title, address, m }) => {
+  const [viewSize, setViewSize] = useState({ width: 0, height: 0 });
+
+  const onLayout = (event) => {
+    const { width, height } = event.nativeEvent.layout;
+    setViewSize({ width, height });
+  };
   return (
-    <TouchableOpacity style={styles.searchSelect} onPress={onPress}>
+    <TouchableOpacity style={styles.searchSelect} onPress={onPress} onLayout={onLayout}>
       <View style={styles.searchSelectLeft}>
         <SvgIcon name="LocationOn" fill={Colors.background} style={styles.searchSelectIcon} width={24} height={24} />
-        <Text style={styles.searchSelectM}>{m >= 1000 ? `${Number(m / 1000).toFixed(1)}km` : `${m}m`}</Text>
+        <Text style={styles.searchSelectM}>{m > 100000 ? `${Number(m / 1000).toFixed(0)}km` : m >= 1000 ? `${Number(m / 1000).toFixed(1)}km` : `${Number(m).toFixed(0)}m`}</Text>
       </View>
-      <View>
+      <View
+        style={[
+          styles.searchSelectTitleAddress,
+          {
+            width: viewSize.width - 80,
+          },
+        ]}>
         <Text style={styles.searchSelectTitle}>{title}</Text>
         <Text style={styles.searchSelectAddress}>{address}</Text>
       </View>

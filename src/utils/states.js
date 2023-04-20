@@ -28,3 +28,11 @@ export const findDataAtom = atom({
     date: todayDate,
   },
 });
+
+export const hereAtom = atom({
+  key: "hereAtom",
+  default: {
+    x: 37.34171950000187,
+    y: 126.83429287647209,
+  },
+});

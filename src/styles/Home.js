@@ -159,12 +159,24 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     paddingRight: 25,
   },
+  putSearch: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  putSearchText: {
+    color: Colors.color,
+    fontSize: 15,
+    fontWeight: "500",
+    opacity: 0.5,
+  },
   searchSelect: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    height: 54,
+    // height: 54,
+    paddingVertical: 8,
     marginVertical: 10,
   },
   searchSelectLeft: {
@@ -206,7 +218,7 @@ const styles = StyleSheet.create({
   },
   mapModalTop: {
     backgroundColor: Colors.background,
-    height: 80,
+    paddingVertical: 23,
     width: "100%",
     borderRadius: 40,
     display: "flex",

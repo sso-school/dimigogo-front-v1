@@ -3,7 +3,7 @@ module.exports = {
   extends: ["@react-native-community", "eslint:recommended", "plugin:react/recommended"],
   overrides: [],
   parserOptions: { ecmaVersion: "latest", sourceType: "module" },
-  plugins: ["react", "import"],
+  plugins: ["react", "import", "react-hooks"],
   rules: {
     "react/prop-types": "off",
     "react/display-name": "off",
@@ -12,6 +12,7 @@ module.exports = {
     quotes: ["error", "double"],
     semi: ["error", "always"],
     "react-native/no-inline-styles": "off",
+    "react-hooks/exhaustive-deps": "warn",
     "no-unused-vars": "warn",
     "import/order": [
       "error",
