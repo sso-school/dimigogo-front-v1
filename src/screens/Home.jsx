@@ -180,7 +180,6 @@ const SelectWhereModals = ({ visible, setVisible, type }) => {
   const [searchList, setSearchList] = useState([]);
 
   useEffect(() => {
-    // console.log(search);
     if (!search) {
       setSearchList([]);
       return;
@@ -188,7 +187,6 @@ const SelectWhereModals = ({ visible, setVisible, type }) => {
     (async () => {
       try {
         const res = await axios.get(`https://map.naver.com/v5/api/instantSearch?lang=ko&caller=pcweb&types=place,address&coords=${here.x},${here.y}&query=${search}`);
-        // console.log(res.data.place);
         const list = res.data.place.map((item) => {
           return {
             name: item.title,
@@ -198,7 +196,6 @@ const SelectWhereModals = ({ visible, setVisible, type }) => {
             m: item.dist * 1000,
           };
         });
-        // console.log(list);
         setSearchList(list);
       } catch {
         console.log("error");
@@ -294,7 +291,13 @@ const SelectMapModal = ({ visible, setVisible, selected, parentsSetVisible, type
               <SvgIcon name="ArrowBack" style={styles.mapModalTopLeftIcon} />
             </TouchableOpacity>
           </View>
-          <View styles={styles.mapModalTopRight}>
+          <View
+            style={[
+              styles.mapModalTopRight,
+              {
+                width: viewSize.width - 100,
+              },
+            ]}>
             <Text style={styles.mapModalTopRightName}>{selected.name}</Text>
             <Text style={styles.mapModalTopRightAddress}>{selected.address}</Text>
           </View>
@@ -403,7 +406,9 @@ const SearchSelect = ({ onPress, title, address, m }) => {
           },
         ]}>
         <Text style={styles.searchSelectTitle}>{title}</Text>
-        <Text style={styles.searchSelectAddress}>{address}</Text>
+        <Text style={styles.searchSelectAddress} lineBreakStrategyIOS="standard">
+          {address}
+        </Text>
       </View>
     </TouchableOpacity>
   );
