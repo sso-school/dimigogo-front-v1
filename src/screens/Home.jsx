@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Animated, Image, Linking, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Animated, Image, Linking, Modal, Platform, Text, TextInput, TouchableOpacity, View } from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useRecoilState } from "recoil";
 
 import { SvgIcon, BlackModal, TransparentModal } from "@/components";
@@ -107,8 +108,12 @@ const Select = () => {
   const [startModalVisiable, setStartModalVisiable] = useState(false);
   const [endModalVisiable, setEndModalVisiable] = useState(false);
   const [dateModalVisiable, setDateModalVisiable] = useState(false);
-
+  const [timeModalVisiable, setTimeModalVisiable] = useState(false);
   const [findData, setFindData] = useRecoilState(findDataAtom);
+
+  useEffect(() => {
+    console.log(findData);
+  }, [findData]);
 
   const onLayout = (event) => {
     const { width } = event.nativeEvent.layout;
@@ -118,7 +123,8 @@ const Select = () => {
     <View style={styles.selects}>
       <SelectWhereModals visible={startModalVisiable} setVisible={setStartModalVisiable} type="departure" />
       <SelectWhereModals visible={endModalVisiable} setVisible={setEndModalVisiable} type="destination" />
-      <SelectDateModals visible={dateModalVisiable} setVisible={setDateModalVisiable} />
+      <SelectDateModals visible={dateModalVisiable} setVisible={setDateModalVisiable} type="date" />
+      <SelectDateModals visible={timeModalVisiable} setVisible={setTimeModalVisiable} type="time" />
       <SelectButton />
       <SelectBox
         title="출발지"
@@ -155,7 +161,7 @@ const Select = () => {
           style={{ width: viewSize, marginLeft: 8 }}
           icon="AvgPace"
           onPress={() => {
-            setDateModalVisiable(true);
+            setTimeModalVisiable(true);
           }}
         />
       </View>
@@ -186,9 +192,6 @@ const SelectWhereModals = ({ visible, setVisible, type }) => {
       m: 1242,
     },
   ]);
-  useEffect(() => {
-    console.log(search);
-  }, [search]);
 
   const what = type === "departure" ? "출발지" : "도착지";
   return (
@@ -223,7 +226,6 @@ const SelectWhereModals = ({ visible, setVisible, type }) => {
                 address={item.address}
                 m={item.m}
                 onPress={() => {
-                  console.log(item.name);
                   setSelected(item);
                   setMapModalVisible(true);
                 }}
@@ -275,13 +277,42 @@ const SelectMapModal = ({ visible, setVisible, selected, parentsSetVisible, type
     </TransparentModal>
   );
 };
-const SelectDateModals = ({ visible, setVisible }) => {
+const SelectDateModals = ({ visible, setVisible, type }) => {
+  const [findData, setFindData] = useRecoilState(findDataAtom);
+  const typeOrigin = type;
+  if (Platform.OS === "ios") {
+    type = "datetime";
+  }
   return (
-    <BlackModal visible={visible} setVisible={setVisible}>
-      <View style={styles.dateModal}>
-        <></>
-      </View>
-    </BlackModal>
+    <DateTimePickerModal
+      isVisible={visible}
+      mode={type}
+      display={type === "date" ? "inline" : type === "time" ? "spinner" : "inline"}
+      onConfirm={(date) => {
+        if (date.getDate() < new Date().getDate()) {
+          Alert.alert("오늘 이전 날짜는\n선택할 수 없어요 😢");
+          setVisible(false);
+          return;
+        } else if (((Platform.OS === "android" && typeOrigin === "time") || Platform.OS === "ios") && date.getDate() === new Date().getDate() && date.getTime() < new Date().getTime()) {
+          Alert.alert("이미 지난 시간은\n선택할 수 없어요 😢");
+          setVisible(false);
+          return;
+        }
+        const newFindData = { ...findData };
+        newFindData.date = {
+          year: date.getFullYear(),
+          month: date.getMonth() + 1,
+          day: date.getDate(),
+          hour: date.getHours(),
+          minute: date.getMinutes(),
+        };
+        setFindData(newFindData);
+        setVisible(false);
+      }}
+      onCancel={() => {
+        setVisible(false);
+      }}
+    />
   );
 };
 

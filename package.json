@@ -11,12 +11,14 @@
     "pod": "npx pod-install"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "^7.0.1",
     "babel-plugin-module-resolver": "^5.0.0",
     "eslint-plugin-import": "^2.27.5",
     "react": "18.2.0",
     "react-native": "0.71.6",
     "react-native-global-props": "^1.1.5",
     "react-native-modal": "^13.0.1",
+    "react-native-modal-datetime-picker": "^15.0.0",
     "react-native-svg": "^13.9.0",
     "recoil": "^0.7.7"
   },
