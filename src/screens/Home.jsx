@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Alert, Animated, Image, Linking, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import Swiper from "react-native-swiper";
 import { useRecoilState } from "recoil";
 
 import { hereAtom } from "../utils/states";
@@ -25,27 +26,53 @@ const Title = () => {
 const Ads = () => {
   const [viewSize, setViewSize] = useState({ width: 0, height: 0 });
 
+  const imageData = [
+    {
+      link: "https://dimipay.io/",
+      image: require("@/assets/images/ads/dimipay.png"),
+    },
+    {
+      link: "https://luna.codes/",
+      image: require("@/assets/images/ads/luna.png"),
+    },
+    {
+      link: "http://fixking.shop/",
+      image: require("@/assets/images/ads/seoulfixking.png"),
+    },
+    {
+      link: "mailto:admin@chicken-moo.com",
+      image: require("@/assets/images/ads/ads.png"),
+    },
+  ];
+
   const onLayout = (event) => {
     const { width, height } = event.nativeEvent.layout;
     setViewSize({ width, height });
   };
   return (
     <View style={styles.ads} onLayout={onLayout}>
-      <TouchableOpacity
-        style={styles.selectButton}
-        onPress={() => {
-          Linking.openURL("https://dimipay.io/");
-        }}
-        activeOpacity={1}>
-        <Image
-          source={require("@/assets/images/ads.png")}
-          style={{
-            width: viewSize.width,
-            height: viewSize.height,
-            resizeMode: "cover",
-          }}
-        />
-      </TouchableOpacity>
+      <Swiper autoplay={true} autoplayTimeout={5} showsPagination={false}>
+        {imageData.map((data, index) => {
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                Linking.openURL(data.link);
+              }}
+              activeOpacity={1}
+              key={index}>
+              <Image
+                source={data.image}
+                style={{
+                  width: viewSize.width,
+                  height: viewSize.height,
+                  resizeMode: "cover",
+                }}
+              />
+            </TouchableOpacity>
+          );
+        })}
+      </Swiper>
+
       {/* <Text>(BANNER ADs)</Text> */}
     </View>
   );

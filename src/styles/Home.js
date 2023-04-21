@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     position: "relative",
     zIndex: -1,
     top: -50,
-    paddingVertical: 50,
+    // paddingVertical: 50,
     height: 270,
     display: "flex",
     justifyContent: "center",
