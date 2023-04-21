@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getDistance } from "geolib";
 import React, { useEffect, useState } from "react";
 import { Alert, Animated, Image, Linking, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -205,16 +206,16 @@ const SelectWhereModals = ({ visible, setVisible, type }) => {
   }, [search]);
 
   const distance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371e3; // 지구 반경 (미터)
-    const φ1 = (lat1 * Math.PI) / 180; // φ, λ을 라디안 값으로 변환
-    const φ2 = (lat2 * Math.PI) / 180;
-    const Δφ = ((lat2 - lat1) * Math.PI) / 180;
-    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+    const R = 6371e3; // 지구 반지름(m)
+    const phi1 = (lat1 * Math.PI) / 180; // 위도1
+    const phi2 = (lat2 * Math.PI) / 180; // 위도2
+    const deltaPhi = ((lat2 - lat1) * Math.PI) / 180; // 위도 차이
+    const deltaLambda = ((lon2 - lon1) * Math.PI) / 180; // 경도 차이
 
-    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) + Math.cos(phi1) * Math.cos(phi2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    const d = R * c; // 두 지점 간의 거리(m)
+    const d = R * c; // 두 지점 사이의 거리(m)
 
     return d;
   };
@@ -251,7 +252,8 @@ const SelectWhereModals = ({ visible, setVisible, type }) => {
                 <SearchSelect
                   title={item.name}
                   address={item.address}
-                  m={distance(here.x, here.y, item.x, item.y)}
+                  // m={distance(item.x, item.y, here.x, here.y)}
+                  m={getDistance({ latitude: item.x, longitude: item.y }, { latitude: here.x, longitude: here.y })}
                   // m={item.m}
                   onPress={() => {
                     setSelected(item);
