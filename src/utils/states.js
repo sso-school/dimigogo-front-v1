@@ -19,11 +19,21 @@ export const findDataAtom = atom({
   default: {
     departure: {
       displayName: "",
-      data: null,
+      data: {
+        originX: null,
+        originY: null,
+        x: null,
+        y: null,
+      },
     },
     destination: {
       displayName: "",
-      data: null,
+      data: {
+        originX: null,
+        originY: null,
+        x: null,
+        y: null,
+      },
     },
     date: todayDate,
   },
@@ -32,7 +42,7 @@ export const findDataAtom = atom({
 export const hereAtom = atom({
   key: "hereAtom",
   default: {
-    x: 37.34171950000187,
-    y: 126.83429287647209,
+    x: 126.83429287647209,
+    y: 37.34171950000187,
   },
 });

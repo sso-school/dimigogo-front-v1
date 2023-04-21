@@ -2,6 +2,7 @@ import axios from "axios";
 import { getDistance } from "geolib";
 import React, { useEffect, useState } from "react";
 import { Alert, Animated, Image, Linking, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import MapView, { Marker, Polyline } from "react-native-maps";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useRecoilState } from "recoil";
 
@@ -187,7 +188,7 @@ const SelectWhereModals = ({ visible, setVisible, type }) => {
     }
     (async () => {
       try {
-        const res = await axios.get(`https://map.naver.com/v5/api/instantSearch?lang=ko&caller=pcweb&types=place,address&coords=${here.x},${here.y}&query=${search}`);
+        const res = await axios.get(`https://map.naver.com/v5/api/instantSearch?lang=ko&caller=pcweb&types=place,address&coords=${here.y},${here.x}&query=${search}`);
         const list = res.data.place.map((item) => {
           return {
             name: item.title,
@@ -205,26 +206,11 @@ const SelectWhereModals = ({ visible, setVisible, type }) => {
     })();
   }, [search]);
 
-  const distance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371e3; // 지구 반지름(m)
-    const phi1 = (lat1 * Math.PI) / 180; // 위도1
-    const phi2 = (lat2 * Math.PI) / 180; // 위도2
-    const deltaPhi = ((lat2 - lat1) * Math.PI) / 180; // 위도 차이
-    const deltaLambda = ((lon2 - lon1) * Math.PI) / 180; // 경도 차이
-
-    const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) + Math.cos(phi1) * Math.cos(phi2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    const d = R * c; // 두 지점 사이의 거리(m)
-
-    return d;
-  };
-
   const what = type === "departure" ? "출발지" : "도착지";
   return (
     <BlackModal visible={visible} setVisible={setVisible}>
       <View style={styles.searchModal}>
-        <SelectMapModal visible={mapModalVisible} setVisible={setMapModalVisible} selected={selected} parentsSetVisible={setVisible} type={type} />
+        <SelectMapModal visible={mapModalVisible} setVisible={setMapModalVisible} selected={selected} setSelected={setSelected} parentsSetVisible={setVisible} type={type} />
         <View style={styles.searchModalTop}>
           <TouchableOpacity
             onPress={() => {
@@ -253,7 +239,7 @@ const SelectWhereModals = ({ visible, setVisible, type }) => {
                   title={item.name}
                   address={item.address}
                   // m={distance(item.x, item.y, here.x, here.y)}
-                  m={getDistance({ latitude: item.x, longitude: item.y }, { latitude: here.x, longitude: here.y })}
+                  m={getDistance({ latitude: item.y, longitude: item.x }, { latitude: here.y, longitude: here.x })}
                   // m={item.m}
                   onPress={() => {
                     setSelected(item);
@@ -273,18 +259,31 @@ const SelectWhereModals = ({ visible, setVisible, type }) => {
     </BlackModal>
   );
 };
-const SelectMapModal = ({ visible, setVisible, selected, parentsSetVisible, type }) => {
+const SelectMapModal = ({ visible, setVisible, selected, setSelected, parentsSetVisible, type }) => {
   const [findData, setFindData] = useRecoilState(findDataAtom);
   const [viewSize, setViewSize] = useState({ width: 0, height: 0 });
+  const [mapViewSize, setMapViewSize] = useState({ width: 0, height: 0 });
+  const [outPut, setOutPut] = useState({});
 
-  const onLayout = (event) => {
+  useEffect(() => {
+    if (selected.name) {
+      setOutPut({
+        name: selected.name,
+        address: selected.address,
+        x: selected.x,
+        y: selected.y,
+      });
+    }
+  }, [selected]);
+
+  const onLayout = (event, setSize) => {
     const { width, height } = event.nativeEvent.layout;
-    setViewSize({ width, height });
+    setSize({ width, height });
   };
   return (
     <TransparentModal visible={visible} setVisible={setVisible}>
       <View style={styles.mapModal}>
-        <View style={styles.mapModalTop} onLayout={onLayout}>
+        <View style={styles.mapModalTop} onLayout={(e) => onLayout(e, setViewSize)}>
           <View styles={styles.mapModalTopLeft}>
             <TouchableOpacity
               onPress={() => {
@@ -304,7 +303,64 @@ const SelectMapModal = ({ visible, setVisible, selected, parentsSetVisible, type
             <Text style={styles.mapModalTopRightAddress}>{selected.address}</Text>
           </View>
         </View>
-
+        <View style={styles.mapModalMap} onLayout={(e) => onLayout(e, setMapViewSize)}>
+          <MapView
+            initialRegion={{
+              latitude: selected.y,
+              longitude: selected.x,
+              latitudeDelta: 0.005,
+              longitudeDelta: 0.005,
+            }}
+            style={{
+              width: "100%",
+              height: "100%",
+              position: "relative",
+              top: -50,
+            }}
+            onPress={(e) => {
+              const newOutput = {
+                ...outPut,
+                x: e.nativeEvent.coordinate.longitude,
+                y: e.nativeEvent.coordinate.latitude,
+              };
+              const dist = getDistance({ latitude: newOutput.y, longitude: newOutput.x }, { latitude: selected.y, longitude: selected.x });
+              // console.log(dist);
+              if (dist > 500) {
+                Alert.alert(`500m 이내로 선택해주세요.\n현재 거리: ${dist > 1000 ? `${(dist / 1000).toFixed(2)}km` : `${dist}m`}`);
+                return;
+              }
+              setOutPut(newOutput);
+            }}>
+            <Marker
+              coordinate={{
+                latitude: outPut.y,
+                longitude: outPut.x,
+              }}
+            />
+            <Polyline
+              coordinates={[
+                {
+                  latitude: outPut.y,
+                  longitude: outPut.x,
+                },
+                {
+                  latitude: selected.y,
+                  longitude: selected.x,
+                },
+              ]}
+              strokeColor={Colors.primary}
+              strokeWidth={3}
+            />
+            <Marker
+              coordinate={{
+                latitude: selected.y,
+                longitude: selected.x,
+              }}
+              title={selected.name}
+              description={selected.address}
+            />
+          </MapView>
+        </View>
         <View style={styles.mapModalConfirm}>
           <TouchableOpacity
             style={styles.mapModalConfirmButton}
@@ -312,7 +368,12 @@ const SelectMapModal = ({ visible, setVisible, selected, parentsSetVisible, type
               const newFindData = { ...findData };
               newFindData[type] = {
                 displayName: selected.name,
-                data: null,
+                data: {
+                  originX: selected.x,
+                  originY: selected.y,
+                  x: outPut.x,
+                  y: outPut.y,
+                },
               };
               setFindData(newFindData);
               parentsSetVisible(false);

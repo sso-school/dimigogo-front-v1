@@ -19,6 +19,7 @@
     "react": "18.2.0",
     "react-native": "0.71.6",
     "react-native-global-props": "^1.1.5",
+    "react-native-maps": "1.6.0",
     "react-native-modal": "^13.0.1",
     "react-native-modal-datetime-picker": "^15.0.0",
     "react-native-svg": "^13.9.0",

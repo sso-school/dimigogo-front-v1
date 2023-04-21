@@ -226,6 +226,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     paddingHorizontal: 32,
+    zIndex: 1000,
   },
   mapModalTopLeftIcon: {
     marginRight: 15,
