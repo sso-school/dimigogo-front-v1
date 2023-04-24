@@ -25,17 +25,27 @@ const SelectWhereModal = ({ visible, setVisible, type }) => {
     }
     (async () => {
       try {
-        const res = await axios.get(`https://map.naver.com/v5/api/instantSearch?lang=ko&caller=pcweb&types=place,address&coords=${here.y},${here.x}&query=${search}`);
+        // const res = await axios.get(`https://search.map.kakao.com/mapsearch/map.daum?q=${search}&msFlag=A&sort=0`);
+        const res = await axios.get("https://search.map.kakao.com/mapsearch/map.daum", {
+          params: {
+            q: search,
+            msFlag: "A",
+            sort: "0",
+          },
+          headers: {
+            Host: "search.map.kakao.com",
+            Referer: "https://map.kakao.com/",
+          },
+        });
         const list = res.data.place.map((item) => {
           return {
-            name: item.title,
-            address: item.roadAddress || item.jibunAddress,
-            x: item.x,
-            y: item.y,
-            m: item.dist * 1000,
+            name: item.name,
+            address: item.new_address || item.address,
+            x: item.lon,
+            y: item.lat,
           };
         });
-        setSearchList(list);
+        list.length > 0 && setSearchList(list);
       } catch {
         console.log("error");
         setSearchList([]);
