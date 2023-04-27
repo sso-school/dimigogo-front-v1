@@ -1,4 +1,3 @@
-import axios from "axios";
 import { getDistance } from "geolib";
 import React, { useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -9,6 +8,7 @@ import SelectMapModal from "./SelectMapModal";
 import { SvgIcon, BlackModal } from "@/components";
 import { Colors } from "@/styles/colors";
 import styles from "@/styles/Home";
+import api from "@/utils/api";
 import { hereAtom } from "@/utils/states";
 
 const SelectWhereModal = ({ visible, setVisible, type }) => {
@@ -26,15 +26,9 @@ const SelectWhereModal = ({ visible, setVisible, type }) => {
     (async () => {
       try {
         // const res = await axios.get(`https://search.map.kakao.com/mapsearch/map.daum?q=${search}&msFlag=A&sort=0`);
-        const res = await axios.get("https://search.map.kakao.com/mapsearch/map.daum", {
+        const res = await api.get("/map/search", {
           params: {
             q: search,
-            msFlag: "A",
-            sort: "0",
-          },
-          headers: {
-            Host: "search.map.kakao.com",
-            Referer: "https://map.kakao.com/",
           },
         });
         const list = res.data.place.map((item) => {
@@ -46,8 +40,8 @@ const SelectWhereModal = ({ visible, setVisible, type }) => {
           };
         });
         list.length > 0 && setSearchList(list);
-      } catch {
-        console.log("error");
+      } catch (e) {
+        // console.log(JSON.stringify(e, null, 2));
         setSearchList([]);
       }
     })();

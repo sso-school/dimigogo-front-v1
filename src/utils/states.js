@@ -39,6 +39,11 @@ export const findDataAtom = atom({
   },
 });
 
+export const findingWayDataAtom = atom({
+  key: "findingWayDataAtom",
+  default: {},
+});
+
 export const hereAtom = atom({
   key: "hereAtom",
   default: {
