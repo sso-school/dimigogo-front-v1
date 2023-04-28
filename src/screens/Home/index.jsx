@@ -25,9 +25,16 @@ const FindingWay = async (departure, destination) => {
         y2: urlDestination.data.urlY,
       },
     });
+    const nodes = res.data.list[0].sections[0].links
+      .map((item) => item.points)
+      .join(",")
+      .split(",")
+      .map((item) => item.split(" "));
     return {
       taxiCoast: res.data.list[0].expectedTaxiCost,
-      data: res.data,
+      time: res.data.list[0].expectedTime,
+      nodes: nodes,
+      data: true,
     };
   } catch (e) {
     console.log(`${JSON.stringify(e, null, 2)}\n${new Date()}`);
@@ -37,6 +44,7 @@ const FindingWay = async (departure, destination) => {
 const Home = () => {
   const [findData, setFindData] = useRecoilState(findDataAtom);
   const [findingWayData, setFindingWayData] = useRecoilState(findingWayDataAtom);
+
   useEffect(() => {
     if (!findData?.departure.data.x || !findData?.destination.data.x) {
       return;
@@ -56,12 +64,12 @@ const Home = () => {
     })();
   }, [findData, setFindingWayData]);
 
-  useEffect(() => {
-    if (!findingWayData?.data) {
-      return;
-    }
-    Alert.alert(`${String(findingWayData.taxiCoast.toLocaleString())}원`);
-  }, [findingWayData]);
+  // useEffect(() => {
+  //   if (!findingWayData?.data) {
+  //     return;
+  //   }
+  //   console.log(JSON.stringify(findingWayData, null, 2));
+  // }, [findingWayData]);
 
   return (
     <View>

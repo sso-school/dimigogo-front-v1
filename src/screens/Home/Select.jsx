@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Animated, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useRecoilState } from "recoil";
 
@@ -85,6 +85,7 @@ const Select = () => {
       <SelectWhereModal visible={endModalVisiable} setVisible={setEndModalVisiable} type="destination" />
       <SelectDateModal visible={dateModalVisiable} setVisible={setDateModalVisiable} type="date" />
       <SelectDateModal visible={timeModalVisiable} setVisible={setTimeModalVisiable} type="time" />
+
       <SelectButton />
       <ScrollView style={{ height: 10 }}>
         <SelectBox
