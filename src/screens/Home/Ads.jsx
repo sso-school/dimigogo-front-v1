@@ -3,6 +3,7 @@ import { Image, Linking, TouchableOpacity, View } from "react-native";
 import Swiper from "react-native-swiper";
 
 import styles from "@/styles/Home";
+import openApp from "@/utils/openApp";
 
 const Ads = () => {
   const [viewSize, setViewSize] = useState({ width: 0, height: 0 });
@@ -37,7 +38,13 @@ const Ads = () => {
           return (
             <TouchableOpacity
               onPress={() => {
-                Linking.openURL(data.link);
+                // Linking.openURL(data.link);
+                openApp({
+                  android: "intent://route?sp=462699.0,1067400.0&sn=출발지&ep=474329.0,1088232.0&en=도착지&by=car&referrer=m.map.kakao.com#Intent;scheme=daummaps;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=net.daum.android.map;end",
+                  ios: "kakaomap://route?sp=462699.0,1067400.0&sn=출발지&ep=474329.0,1088232.0&en=도착지&by=car&referrer=m.map.kakao.com",
+                  iosStore: "http://itunes.apple.com/kr/app/id304608425",
+                  androidStore: "https://play.google.com/store/apps/details?id=net.daum.android.map",
+                });
               }}
               activeOpacity={1}
               key={index}>

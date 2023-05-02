@@ -64,12 +64,13 @@ const Home = () => {
     })();
   }, [findData, setFindingWayData]);
 
-  // useEffect(() => {
-  //   if (!findingWayData?.data) {
-  //     return;
-  //   }
-  //   console.log(JSON.stringify(findingWayData, null, 2));
-  // }, [findingWayData]);
+  useEffect(() => {
+    if (!findingWayData?.data) {
+      return;
+    }
+    Alert.alert(`${Math.round(findingWayData.time / 60)}분 ${findingWayData.taxiCoast.toLocaleString()}원`);
+    // console.log(JSON.stringify(findingWayData, null, 2));
+  }, [findingWayData]);
 
   return (
     <View>

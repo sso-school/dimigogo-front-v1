@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 40,
     position: "relative",
     top: -100,
-    height: 500,
+    height: "100%",
     padding: 20,
   },
   selectButtons: {
