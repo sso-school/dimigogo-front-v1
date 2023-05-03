@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Animated, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Animated, Button, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useRecoilState } from "recoil";
 
 import SelectDateModal from "./SelectDateModal";
@@ -8,6 +8,7 @@ import SelectWhereModal from "./SelectWhereModal";
 import { SvgIcon } from "@/components";
 import { Colors } from "@/styles/colors";
 import styles from "@/styles/Home";
+import api from "@/utils/api";
 import { findCreateSelectAtom, findDataAtom } from "@/utils/states";
 
 const SelectButton = ({ onPress, selected }) => {
@@ -79,6 +80,16 @@ const Select = () => {
     const { width } = event.nativeEvent.layout;
     setViewSize(Number(width * 0.5 - 8));
   };
+
+  const buttonClick = async () => {
+    try {
+      const res = await api.get("/");
+      Alert.alert("테스트", JSON.stringify(res.data, null, 2));
+    } catch (e) {
+      Alert.alert("테스트", JSON.stringify(e, null, 2));
+    }
+  };
+
   return (
     <View style={styles.selects}>
       <SelectWhereModal visible={startModalVisiable} setVisible={setStartModalVisiable} type="departure" />
@@ -130,6 +141,7 @@ const Select = () => {
         <TouchableOpacity style={styles.selectNextButton}>
           <Text style={styles.selectNextButtonText}>다음</Text>
         </TouchableOpacity>
+        <Button title="테스트 버튼" onPress={buttonClick} />
       </ScrollView>
     </View>
   );
