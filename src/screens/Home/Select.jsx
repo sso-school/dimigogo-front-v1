@@ -84,14 +84,9 @@ const Select = () => {
 
   const buttonClick = async () => {
     const kakaoAuthToken = await login();
-    Alert.alert("테스트", JSON.stringify(kakaoAuthToken, null, 2));
-    // const kakaoAutoToken = await login
-    // try {
-    //   const res = await api.get("/");
-    //   Alert.alert("테스트", JSON.stringify(res.data, null, 2));
-    // } catch (e) {
-    //   Alert.alert("테스트", JSON.stringify(e, null, 2));
-    // }
+    console.log(JSON.stringify(kakaoAuthToken, null, 2));
+    const kakaoProfile = await getKakaoProfile();
+    console.log(JSON.stringify(kakaoProfile, null, 2));
   };
 
   return (
