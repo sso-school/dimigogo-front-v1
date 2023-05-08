@@ -1,3 +1,4 @@
+import { login, logout, getProfile as getKakaoProfile, unlink } from "@react-native-seoul/kakao-login";
 import React, { useEffect, useState } from "react";
 import { Alert, Animated, Button, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useRecoilState } from "recoil";
@@ -82,12 +83,15 @@ const Select = () => {
   };
 
   const buttonClick = async () => {
-    try {
-      const res = await api.get("/");
-      Alert.alert("테스트", JSON.stringify(res.data, null, 2));
-    } catch (e) {
-      Alert.alert("테스트", JSON.stringify(e, null, 2));
-    }
+    const kakaoAuthToken = await login();
+    Alert.alert("테스트", JSON.stringify(kakaoAuthToken, null, 2));
+    // const kakaoAutoToken = await login
+    // try {
+    //   const res = await api.get("/");
+    //   Alert.alert("테스트", JSON.stringify(res.data, null, 2));
+    // } catch (e) {
+    //   Alert.alert("테스트", JSON.stringify(e, null, 2));
+    // }
   };
 
   return (
