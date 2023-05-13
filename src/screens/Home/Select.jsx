@@ -70,26 +70,26 @@ const Select = () => {
           <SvgIcon name="ArrowRange" width={20} height={20} fill={Colors.gray} />
         </View>
         <View style={styles.startEndView}>
-          <View style={styles.s}>
+          <TouchableOpacity style={styles.s}>
             <Text style={styles.sTitle}>출발지</Text>
             <Text style={styles.sWhere}>한국디지털...</Text>
-          </View>
-          <View style={styles.s}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.s}>
             <Text style={styles.sTitle}>도착지</Text>
             <Text style={styles.sWhere}>한미...</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.bottomBorder}>
-        <View style={styles.dateView}>
+        <TouchableOpacity style={styles.dateView}>
           <SvgIcon name="CalendarToday" />
           <Text style={styles.date}>2023년 13월 32일 25시</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.searchView}>
-        <View style={styles.searchButton}>
+        <TouchableOpacity style={styles.searchButton}>
           <Text style={styles.searchButtonText}>택시 팟 조회하기</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

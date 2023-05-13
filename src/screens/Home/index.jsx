@@ -1,12 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useContext, useEffect } from "react";
-import { Alert, Button, View } from "react-native";
+import { Alert, Button, ScrollView, View } from "react-native";
 import { useRecoilState } from "recoil";
 
 import Ads from "./Ads";
 import Select from "./Select";
 import Title from "./Title";
 
+import Menu from "@/components/Menu";
+import styles from "@/styles/App";
 import { AxiosContext } from "@/utils/AxiosContext";
 import { authAtom, findDataAtom, findingWayDataAtom } from "@/utils/states";
 
@@ -75,19 +77,15 @@ const Home = () => {
     // console.log(JSON.stringify(findingWayData, null, 2));
   }, [findingWayData]);
 
-  const [auth, setAuth] = useRecoilState(authAtom);
-  const buttonClick = async () => {
-    await AsyncStorage.removeItem("accessToken");
-    await AsyncStorage.removeItem("refreshToken");
-    setAuth({ accessToken: null, refreshToken: null });
-  };
-
   return (
-    <View>
-      <Title />
-      <Ads />
-      <Select />
-      {/* <Button title="테스트 버튼" onPress={buttonClick} /> */}
+    <View style={styles.fullscreen}>
+      <ScrollView>
+        <Title />
+        <Ads />
+        <Select />
+        {/* <Button title="테스트 버튼" onPress={buttonClick} /> */}
+      </ScrollView>
+      <Menu />
     </View>
   );
 };

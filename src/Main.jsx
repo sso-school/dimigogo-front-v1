@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { StatusBar, View } from "react-native";
+import { Platform, StatusBar, View } from "react-native";
 import { useRecoilState } from "recoil";
 
 import Auth from "@/screens/auth";
@@ -9,8 +9,10 @@ import { Colors } from "@/styles/colors";
 import { authAtom, fullScreenSizeAtom } from "@/utils/states";
 
 const Main = () => {
-  StatusBar.setBackgroundColor(Colors.background);
-  StatusBar.setBarStyle("dark-content");
+  if (Platform.OS === "android") {
+    StatusBar.setBackgroundColor(Colors.background);
+    StatusBar.setBarStyle("dark-content");
+  }
 
   const [auth, setAuth] = useRecoilState(authAtom);
   const [fullScreenSize, setFullScreenSize] = useRecoilState(fullScreenSizeAtom);
