@@ -1,26 +1,31 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { login, logout, getProfile as getKakaoProfile, unlink } from "@react-native-seoul/kakao-login";
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Alert, View, Text, TouchableOpacity } from "react-native";
 import { useRecoilState } from "recoil";
 
 import { SvgIcon } from "@/components";
 import styles from "@/styles/Auth";
-import api from "@/utils/api";
+import { AxiosContext } from "@/utils/AxiosContext";
 import { authAtom } from "@/utils/states";
 
 const Auth = () => {
+  const { publicAxios } = useContext(AxiosContext);
   const [auth, setAuth] = useRecoilState(authAtom);
+
   const buttonClick = async () => {
     const kakaoAuthToken = await login();
     console.log(JSON.stringify(kakaoAuthToken, null, 2));
     const {
       data: { accessToken, refreshToken },
-    } = await api.post("/auth/login", {
+    } = await publicAxios.post("/auth/login", {
       kakaoAccesstoken: kakaoAuthToken.accessToken,
     });
-    setAuth({ accessToken, refreshToken });
+    setAuth({
+      accessToken,
+      refreshToken,
+    });
     await AsyncStorage.setItem("accessToken", accessToken);
     await AsyncStorage.setItem("refreshToken", refreshToken);
   };

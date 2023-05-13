@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { login, logout, getProfile as getKakaoProfile, unlink } from "@react-native-seoul/kakao-login";
 import React, { useEffect, useState } from "react";
 import { Alert, Animated, Button, ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -9,8 +10,7 @@ import SelectWhereModal from "./SelectWhereModal";
 import { SvgIcon } from "@/components";
 import { Colors } from "@/styles/colors";
 import styles from "@/styles/Home";
-import api from "@/utils/api";
-import { findCreateSelectAtom, findDataAtom } from "@/utils/states";
+import { authAtom, findCreateSelectAtom, findDataAtom } from "@/utils/states";
 
 const SelectButton = ({ onPress, selected }) => {
   const [select, setSelect] = useRecoilState(findCreateSelectAtom);
@@ -82,11 +82,11 @@ const Select = () => {
     setViewSize(Number(width * 0.5 - 8));
   };
 
+  const [auth, setAuth] = useRecoilState(authAtom);
   const buttonClick = async () => {
-    const kakaoAuthToken = await login();
-    console.log(JSON.stringify(kakaoAuthToken, null, 2));
-    const kakaoProfile = await getKakaoProfile();
-    console.log(JSON.stringify(kakaoProfile, null, 2));
+    await AsyncStorage.removeItem("accessToken");
+    await AsyncStorage.removeItem("refreshToken");
+    setAuth({ accessToken: null, refreshToken: null });
   };
 
   return (

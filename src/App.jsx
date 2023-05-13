@@ -6,6 +6,7 @@ import { RecoilRoot } from "recoil";
 import Main from "./Main";
 
 import styles from "@/styles/App";
+import { AxiosProvider } from "@/utils/AxiosContext";
 
 const App = () => {
   setCustomText({
@@ -16,9 +17,11 @@ const App = () => {
 
   return (
     <RecoilRoot>
-      <SafeAreaView style={styles.background}>
-        <Main />
-      </SafeAreaView>
+      <AxiosProvider>
+        <SafeAreaView style={styles.background}>
+          <Main />
+        </SafeAreaView>
+      </AxiosProvider>
     </RecoilRoot>
   );
 };
