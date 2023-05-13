@@ -3,7 +3,8 @@ import { SafeAreaView } from "react-native";
 import { setCustomText } from "react-native-global-props";
 import { RecoilRoot } from "recoil";
 
-import Home from "@/screens/Home";
+import Main from "./Main";
+
 import styles from "@/styles/App";
 
 const App = () => {
@@ -16,7 +17,7 @@ const App = () => {
   return (
     <RecoilRoot>
       <SafeAreaView style={styles.background}>
-        <Home />
+        <Main />
       </SafeAreaView>
     </RecoilRoot>
   );
