@@ -3,8 +3,10 @@ import { SafeAreaView } from "react-native";
 import { setCustomText } from "react-native-global-props";
 import { RecoilRoot } from "recoil";
 
-import Home from "@/screens/Home";
+import Main from "./Main";
+
 import styles from "@/styles/App";
+import { AxiosProvider } from "@/utils/AxiosContext";
 
 const App = () => {
   setCustomText({
@@ -15,9 +17,11 @@ const App = () => {
 
   return (
     <RecoilRoot>
-      <SafeAreaView style={styles.background}>
-        <Home />
-      </SafeAreaView>
+      <AxiosProvider>
+        <SafeAreaView style={styles.background}>
+          <Main />
+        </SafeAreaView>
+      </AxiosProvider>
     </RecoilRoot>
   );
 };

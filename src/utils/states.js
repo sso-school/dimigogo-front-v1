@@ -1,5 +1,13 @@
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 
+export const authAtom = atom({
+  key: "authAtom",
+  default: {
+    accessToken: null,
+    refreshToken: null,
+  },
+});
+
 export const findCreateSelectAtom = atom({
   key: "findCreateSelectAtom",
   default: 0,

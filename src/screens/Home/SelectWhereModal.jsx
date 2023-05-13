@@ -1,5 +1,5 @@
 import { getDistance } from "geolib";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useRecoilState } from "recoil";
 
@@ -8,10 +8,12 @@ import SelectMapModal from "./SelectMapModal";
 import { SvgIcon, BlackModal } from "@/components";
 import { Colors } from "@/styles/colors";
 import styles from "@/styles/Home";
-import api from "@/utils/api";
+import { AxiosContext } from "@/utils/AxiosContext";
 import { hereAtom } from "@/utils/states";
 
 const SelectWhereModal = ({ visible, setVisible, type }) => {
+  const { authAxios } = useContext(AxiosContext);
+
   const [here, setHere] = useRecoilState(hereAtom);
   const [mapModalVisible, setMapModalVisible] = useState(false);
   const [selected, setSelected] = useState({});
@@ -26,7 +28,7 @@ const SelectWhereModal = ({ visible, setVisible, type }) => {
     (async () => {
       try {
         // const res = await axios.get(`https://search.map.kakao.com/mapsearch/map.daum?q=${search}&msFlag=A&sort=0`);
-        const res = await api.get("/map/search", {
+        const res = await authAxios.get("/map/search", {
           params: {
             q: search,
           },
@@ -41,7 +43,7 @@ const SelectWhereModal = ({ visible, setVisible, type }) => {
         });
         list.length > 0 && setSearchList(list);
       } catch (e) {
-        // console.log(JSON.stringify(e, null, 2));
+        console.log(JSON.stringify(e, null, 2));
         setSearchList([]);
       }
     })();

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Alert, View } from "react-native";
 import { useRecoilState } from "recoil";
 
@@ -6,18 +6,18 @@ import Ads from "./Ads";
 import Select from "./Select";
 import Title from "./Title";
 
-import api from "@/utils/api";
+import { AxiosContext } from "@/utils/AxiosContext";
 import { findDataAtom, findingWayDataAtom } from "@/utils/states";
 
-const FindingWay = async (departure, destination) => {
+const FindingWay = async (authAxios, departure, destination) => {
   try {
-    const urlDeparture = await api.get("/map/position", {
+    const urlDeparture = await authAxios.get("/map/position", {
       params: departure,
     });
-    const urlDestination = await api.get("/map/position", {
+    const urlDestination = await authAxios.get("/map/position", {
       params: destination,
     });
-    const res = await api.get("/map/carinfo", {
+    const res = await authAxios.get("/map/carinfo", {
       params: {
         x1: urlDeparture.data.urlX,
         y1: urlDeparture.data.urlY,
@@ -44,6 +44,7 @@ const FindingWay = async (departure, destination) => {
 const Home = () => {
   const [findData, setFindData] = useRecoilState(findDataAtom);
   const [findingWayData, setFindingWayData] = useRecoilState(findingWayDataAtom);
+  const { authAxios } = useContext(AxiosContext);
 
   useEffect(() => {
     if (!findData?.departure.data.x || !findData?.destination.data.x) {
@@ -51,6 +52,7 @@ const Home = () => {
     }
     (async () => {
       const findingWay = await FindingWay(
+        authAxios,
         {
           x: findData.departure.data.x,
           y: findData.departure.data.y,
