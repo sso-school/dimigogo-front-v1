@@ -21,14 +21,34 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    position: "absolute",
-    bottom: 30,
+    marginTop: 40,
+    // position: "absolute",
+    // bottom: 30,
   },
   kakaoLoginText: {
     color: "#000000",
     fontSize: 16,
     fontWeight: 400,
     marginLeft: 10,
+  },
+  logo: {
+    width: 200,
+    height: 200,
+  },
+  authTitle: {
+    fontSize: 25,
+    color: Colors.color,
+    fontWeight: 600,
+    marginTop: 30,
+  },
+  authTitleDimigogo: {
+    color: Colors.primary,
+    fontWeight: 900,
+  },
+  authCont: {
+    marginTop: 20,
+    fontWeight: 500,
+    fontSize: 16,
   },
 });
 

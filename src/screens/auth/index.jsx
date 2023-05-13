@@ -32,7 +32,11 @@ const Auth = () => {
 
   return (
     <View style={styles.authView}>
-      <Text style={styles.authTitle}>편리하고 값싸게, 디미고고</Text>
+      <SvgIcon name="Logo" style={styles.logo} width={200} height={200} />
+      <Text style={styles.authTitle}>
+        편리하고 값싸게, <Text style={styles.authTitleDimigogo}>디미고고</Text>
+      </Text>
+      <Text style={styles.authCont}>모여서 택시타고 경제력과 환경 모두 챙기기</Text>
       {/* <View style={styles.kakaoLogin}></View> */}
       <TouchableOpacity style={styles.kakaoLogin} onPress={buttonClick}>
         <SvgIcon name="KakaoLogo" style={styles.kakaoLogo} />
