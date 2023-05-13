@@ -59,3 +59,11 @@ export const hereAtom = atom({
     y: 37.34171950000187,
   },
 });
+
+export const fullScreenSizeAtom = atom({
+  key: "fullScreenAtom",
+  default: {
+    width: 0,
+    height: 0,
+  },
+});

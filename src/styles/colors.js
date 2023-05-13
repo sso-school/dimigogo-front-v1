@@ -1,6 +1,9 @@
 export const Colors = {
-  primary: "#A4CB73",
-  secondary: "#F4F5F1",
-  background: "#FDFFFA",
-  color: "#0C1600",
+  primary: "#5673F9",
+  secondary: "#F2F7FF",
+  background: "#FCFDFF",
+  color: "#141414",
+  boxBackground: "#FBFBFB",
+  gray: "#C8DAF6",
+  icon: "#B5BBC3",
 };

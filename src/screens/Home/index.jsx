@@ -1,5 +1,6 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useContext, useEffect } from "react";
-import { Alert, View } from "react-native";
+import { Alert, Button, View } from "react-native";
 import { useRecoilState } from "recoil";
 
 import Ads from "./Ads";
@@ -7,7 +8,7 @@ import Select from "./Select";
 import Title from "./Title";
 
 import { AxiosContext } from "@/utils/AxiosContext";
-import { findDataAtom, findingWayDataAtom } from "@/utils/states";
+import { authAtom, findDataAtom, findingWayDataAtom } from "@/utils/states";
 
 const FindingWay = async (authAxios, departure, destination) => {
   try {
@@ -74,11 +75,19 @@ const Home = () => {
     // console.log(JSON.stringify(findingWayData, null, 2));
   }, [findingWayData]);
 
+  const [auth, setAuth] = useRecoilState(authAtom);
+  const buttonClick = async () => {
+    await AsyncStorage.removeItem("accessToken");
+    await AsyncStorage.removeItem("refreshToken");
+    setAuth({ accessToken: null, refreshToken: null });
+  };
+
   return (
     <View>
       <Title />
       <Ads />
       <Select />
+      {/* <Button title="테스트 버튼" onPress={buttonClick} /> */}
     </View>
   );
 };

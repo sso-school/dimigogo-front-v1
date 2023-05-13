@@ -12,136 +12,85 @@ import { Colors } from "@/styles/colors";
 import styles from "@/styles/Home";
 import { authAtom, findCreateSelectAtom, findDataAtom } from "@/utils/states";
 
-const SelectButton = ({ onPress, selected }) => {
-  const [select, setSelect] = useRecoilState(findCreateSelectAtom);
-  const [locateAnimatedValue] = useState(new Animated.Value(0));
-
-  const [viewSize, setViewSize] = useState({ width: 0, height: 0 });
-
-  const onLayout = (event) => {
-    const { width, height } = event.nativeEvent.layout;
-    setViewSize({ width, height });
-  };
-
-  const setChange = (num) => {
-    setSelect(num);
-    Animated.timing(locateAnimatedValue, {
-      toValue: Number(`${num * viewSize.width * 0.5}`),
-      duration: 250,
-      useNativeDriver: true,
-    }).start();
-  };
-  const checkStyle = (num) => {
-    return select === num ? [styles.selectButtonText, styles.selectButtonTextSelected] : [styles.selectButtonText];
-  };
-
-  return (
-    <View style={styles.selectButtons} onLayout={onLayout}>
-      <Animated.View
-        style={[
-          styles.selectButtonBox,
-          {
-            transform: [{ translateX: locateAnimatedValue }],
-          },
-        ]}
-      />
-      <TouchableOpacity style={styles.selectButton} onPress={() => setChange(0)} activeOpacity={1}>
-        <Text style={checkStyle(0)}>찾아보기</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.selectButton} onPress={() => setChange(1)} activeOpacity={1}>
-        <Text style={checkStyle(1)}>생성하기</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-const SelectBox = ({ icon, iconStyle, image, title, text, onPress, style }) => {
-  return (
-    <View style={{ ...styles.select, ...style }}>
-      <Text style={styles.selectTitle}>{title}</Text>
-      <TouchableOpacity style={styles.selectBox} onPress={onPress}>
-        {icon && (
-          <View style={styles.selectIcon}>
-            <SvgIcon name={icon} fill={Colors.background} style={iconStyle} />
-          </View>
-        )}
-        <Text style={styles.selectText}>{text}</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
 const Select = () => {
-  const [viewSize, setViewSize] = useState(0);
-  const [startModalVisiable, setStartModalVisiable] = useState(false);
-  const [endModalVisiable, setEndModalVisiable] = useState(false);
-  const [dateModalVisiable, setDateModalVisiable] = useState(false);
-  const [timeModalVisiable, setTimeModalVisiable] = useState(false);
-  const [findData, setFindData] = useRecoilState(findDataAtom);
+  const [isSearch, setIsSearch] = useState(0);
+  const [parentSize, setParentSize] = useState({ width: 0, height: 0 });
+  const [position] = useState(new Animated.Value(0));
 
-  const onLayout = (event) => {
-    const { width } = event.nativeEvent.layout;
-    setViewSize(Number(width * 0.5 - 8));
+  useEffect(() => {
+    if (position._value === 1) {
+      Animated.timing(position, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [position]);
+
+  const handleLayout = (event) => {
+    const { width, height } = event.nativeEvent.layout;
+    setParentSize({ width, height });
   };
-
-  const [auth, setAuth] = useRecoilState(authAtom);
-  const buttonClick = async () => {
-    await AsyncStorage.removeItem("accessToken");
-    await AsyncStorage.removeItem("refreshToken");
-    setAuth({ accessToken: null, refreshToken: null });
-  };
-
   return (
-    <View style={styles.selects}>
-      <SelectWhereModal visible={startModalVisiable} setVisible={setStartModalVisiable} type="departure" />
-      <SelectWhereModal visible={endModalVisiable} setVisible={setEndModalVisiable} type="destination" />
-      <SelectDateModal visible={dateModalVisiable} setVisible={setDateModalVisiable} type="date" />
-      <SelectDateModal visible={timeModalVisiable} setVisible={setTimeModalVisiable} type="time" />
-
-      <SelectButton />
-      <ScrollView style={{ height: 10 }}>
-        <SelectBox
-          title="출발지"
-          text={findData.departure.displayName || "출발지를 선택해주세요."}
-          icon="LineStartCircle"
-          onPress={() => {
-            setStartModalVisiable(true);
+    <View style={styles.search}>
+      <TouchableOpacity
+        style={styles.selects}
+        onLayout={handleLayout}
+        activeOpacity={1}
+        onPress={() => {
+          Animated.timing(position, {
+            toValue: !isSearch,
+            duration: 200,
+            useNativeDriver: false,
+          }).start();
+          setIsSearch(!isSearch);
+        }}>
+        <Animated.View
+          style={{
+            ...styles.selectedBox,
+            transform: [
+              {
+                translateX: position.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, parentSize.width * 0.5],
+                }),
+              },
+            ],
           }}
         />
-        <SelectBox
-          title="도착지"
-          text={findData.destination.displayName || "도착지를 선택해주세요."}
-          icon="LineStartCircle"
-          iconStyle={{
-            transform: [{ rotate: "180deg" }],
-          }}
-          onPress={() => {
-            setEndModalVisiable(true);
-          }}
-        />
-        <View style={styles.selectWhen} onLayout={onLayout}>
-          <SelectBox
-            title="출발 날짜"
-            text={`${findData.date.month}월 ${findData.date.day}일`}
-            style={{ width: viewSize, marginRight: 8 }}
-            icon="CalendarToday"
-            onPress={() => {
-              setDateModalVisiable(true);
-            }}
-          />
-          <SelectBox
-            title="출발 시간"
-            text={`${findData.date.hour}시 ${findData.date.minute}분`}
-            style={{ width: viewSize, marginLeft: 8 }}
-            icon="AvgPace"
-            onPress={() => {
-              setTimeModalVisiable(true);
-            }}
-          />
+        <View style={styles.selectButtonView}>
+          <Text style={styles.selectButtonText}>검색하기</Text>
         </View>
-        <TouchableOpacity style={styles.selectNextButton}>
-          <Text style={styles.selectNextButtonText}>다음</Text>
-        </TouchableOpacity>
-        <Button title="테스트 버튼" onPress={buttonClick} />
-      </ScrollView>
+        <View style={styles.selectButtonView}>
+          <Text style={styles.selectButtonText}>택시 팟 생성하기</Text>
+        </View>
+      </TouchableOpacity>
+      <View style={styles.bottomBorder}>
+        <View style={styles.changeIcon}>
+          <SvgIcon name="ArrowRange" width={20} height={20} fill={Colors.gray} />
+        </View>
+        <View style={styles.startEndView}>
+          <View style={styles.s}>
+            <Text style={styles.sTitle}>출발지</Text>
+            <Text style={styles.sWhere}>한국디지털...</Text>
+          </View>
+          <View style={styles.s}>
+            <Text style={styles.sTitle}>도착지</Text>
+            <Text style={styles.sWhere}>한미...</Text>
+          </View>
+        </View>
+      </View>
+      <View style={styles.bottomBorder}>
+        <View style={styles.dateView}>
+          <SvgIcon name="CalendarToday" />
+          <Text style={styles.date}>2023년 13월 32일 25시</Text>
+        </View>
+      </View>
+      <View style={styles.searchView}>
+        <View style={styles.searchButton}>
+          <Text style={styles.searchButtonText}>택시 팟 조회하기</Text>
+        </View>
+      </View>
     </View>
   );
 };

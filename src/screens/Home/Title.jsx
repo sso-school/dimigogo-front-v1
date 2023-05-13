@@ -6,8 +6,11 @@ import styles from "@/styles/Home";
 const Title = () => {
   return (
     <View style={styles.title}>
-      <Text style={styles.titleText}>DIMIGO</Text>
-      <Text style={[styles.titleText, styles.titleTextGreen]}>GO</Text>
+      <View style={styles.titleView}>
+        <Text style={styles.titleText}>Dimi</Text>
+        <Text style={[styles.titleText, styles.titleTextGreen]}>GOGO</Text>
+      </View>
+      <View style={styles.profileView} />
     </View>
   );
 };
