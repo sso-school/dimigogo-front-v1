@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Animated, Text, TouchableOpacity, View } from "react-native";
 import { useRecoilState } from "recoil";
 
+import SelectDateModal from "./SelectDateModal";
 import SelectWhereModal from "./SelectWhereModal";
 
 import { SvgIcon } from "@/components";
@@ -36,6 +37,7 @@ const Select = () => {
 
   const [modalStartVisible, setModalStartVisible] = useState(false);
   const [modalEndVisible, setModalEndVisible] = useState(false);
+  const [modalDateVisible, setModalDateVisible] = useState(false);
 
   const startEndPress = (type) => {
     if (type === "출발지") {
@@ -51,6 +53,8 @@ const Select = () => {
     <>
       <SelectWhereModal visibleState={[modalStartVisible, setModalStartVisible]} type="출발지" />
       <SelectWhereModal visibleState={[modalEndVisible, setModalEndVisible]} type="도착지" />
+      <SelectDateModal visibleState={[modalDateVisible, setModalDateVisible]} />
+
       <View style={styles.search}>
         <TouchableOpacity
           style={styles.selects}
@@ -100,9 +104,9 @@ const Select = () => {
           </View>
         </View>
         <View style={styles.bottomBorder}>
-          <TouchableOpacity style={styles.dateView}>
+          <TouchableOpacity style={styles.dateView} onPress={() => setModalDateVisible(true)}>
             <SvgIcon name="CalendarToday" />
-            <Text style={styles.date}>2023년 13월 32일 25시</Text>
+            <Text style={styles.date}>{`${findData.date.year}년 ${findData.date.month}월 ${findData.date.day}일 ${findData.date.hour}시`}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.searchView}>
