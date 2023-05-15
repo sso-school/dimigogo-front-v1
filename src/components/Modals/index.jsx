@@ -51,3 +51,5 @@ export const TransparentModal = ({ setVisible, ...props }) => {
     </Modal>
   );
 };
+
+export { default as LeftSideModal } from "./LeftSlideModal";

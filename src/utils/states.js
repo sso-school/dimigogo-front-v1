@@ -7,6 +7,10 @@ export const authAtom = atom({
     refreshToken: null,
   },
 });
+export const urlAtom = atom({
+  key: "urlAtom",
+  default: "home",
+});
 
 export const findCreateSelectAtom = atom({
   key: "findCreateSelectAtom",

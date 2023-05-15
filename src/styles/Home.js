@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 import { Colors } from "@/styles/colors";
 
@@ -167,6 +167,86 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     position: "absolute",
     top: 0,
+  },
+  selectModalSearchView: {
+    paddingHorizontal: 25,
+    marginTop: 15,
+    width: "100%",
+  },
+  selectModalSearchViewInner: {
+    borderColor: Colors.secondary,
+    borderWidth: 2,
+    borderRadius: 5,
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    marginBottom: 5,
+  },
+  selectModalSearchInput: {
+    color: Colors.color,
+    paddingVertical: Platform.OS === "ios" ? 11 : 8,
+    width: "auto",
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  selectModalSearchViewIcon: {
+    width: 30,
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  selectModalResult: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+    paddingVertical: 20,
+    paddingHorizontal: 8,
+  },
+  selectModalResultBottom: {
+    borderBottomColor: Colors.secondary,
+    borderBottomWidth: 2,
+  },
+  selectModalResultTitle: {
+    color: Colors.color,
+    fontSize: 14,
+    fontWeight: 500,
+  },
+  selectModalResultAddr: {
+    color: Colors.color,
+    fontSize: 12,
+    fontWeight: 500,
+    opacity: 0.5,
+    marginTop: 3,
+  },
+  selectModalResultKm: {
+    color: Colors.color,
+    fontSize: 12,
+    fontWeight: 500,
+    opacity: 0.5,
+  },
+  detailSelectButton: {
+    width: "100%",
+    position: "absolute",
+    bottom: 0,
+    paddingHorizontal: 25,
+  },
+  detailSelectButtonView: {
+    width: "100%",
+    backgroundColor: Colors.primary,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 17,
+    borderRadius: 7,
+  },
+  detailSelectButtonText: {
+    color: Colors.background,
+    fontSize: 14,
+    fontWeight: 500,
   },
 });
 

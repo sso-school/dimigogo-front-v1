@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 import { Colors } from "@/styles/colors";
 
 const styles = StyleSheet.create({
-  title: {},
   menu: {
     position: "absolute",
     bottom: 0,

@@ -1,13 +1,17 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React, { createContext, useContext, useEffect } from "react";
+import { useRecoilState } from "recoil";
 
 import ENV from "@/utils/env";
+import { authAtom } from "@/utils/states";
 
 const AxiosContext = createContext();
 const { Provider } = AxiosContext;
 
 const AxiosProvider = ({ children }) => {
+  const [auth, setAuth] = useRecoilState(authAtom);
+
   const publicAxios = axios.create({
     baseURL: ENV.apiUrl,
   });
@@ -25,7 +29,6 @@ const AxiosProvider = ({ children }) => {
       return config;
     },
     (error) => {
-      console.log("Request interceptor error:", error);
       return Promise.reject(error);
     },
   );
@@ -45,6 +48,10 @@ const AxiosProvider = ({ children }) => {
           });
           await AsyncStorage.setItem("accessToken", newAccessToken);
           await AsyncStorage.setItem("refreshToken", newRefreshToken);
+          setAuth({
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken,
+          });
 
           let originalRequest = {
             ...error.config,
@@ -54,6 +61,10 @@ const AxiosProvider = ({ children }) => {
         } catch (e) {
           await AsyncStorage.removeItem("accessToken");
           await AsyncStorage.removeItem("refreshToken");
+          setAuth({
+            accessToken: null,
+            refreshToken: null,
+          });
           return Promise.reject(error);
         }
       }

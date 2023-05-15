@@ -83,6 +83,10 @@ const Home = () => {
         <Title />
         <Ads />
         <Select />
+        {/* <Select />
+        <Select />
+        <Select />
+        <Select /> */}
         {/* <Button title="테스트 버튼" onPress={buttonClick} /> */}
       </ScrollView>
       <Menu />
