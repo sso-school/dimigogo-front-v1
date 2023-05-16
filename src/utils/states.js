@@ -7,6 +7,10 @@ export const authAtom = atom({
     refreshToken: null,
   },
 });
+export const urlAtom = atom({
+  key: "urlAtom",
+  default: "home",
+});
 
 export const findCreateSelectAtom = atom({
   key: "findCreateSelectAtom",
@@ -19,7 +23,6 @@ const todayDate = {
   month: today.getMonth() + 1,
   day: today.getDate(),
   hour: today.getHours(),
-  minute: today.getMinutes(),
 };
 
 export const findDataAtom = atom({
@@ -57,5 +60,13 @@ export const hereAtom = atom({
   default: {
     x: 126.83429287647209,
     y: 37.34171950000187,
+  },
+});
+
+export const fullScreenSizeAtom = atom({
+  key: "fullScreenAtom",
+  default: {
+    width: 0,
+    height: 0,
   },
 });

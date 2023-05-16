@@ -1,13 +1,16 @@
-import React, { useContext, useEffect } from "react";
-import { Alert, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useContext, useEffect, useState } from "react";
+import { Alert, Button, RefreshControl, ScrollView, View } from "react-native";
 import { useRecoilState } from "recoil";
 
 import Ads from "./Ads";
 import Select from "./Select";
 import Title from "./Title";
 
+import Menu from "@/components/Menu";
+import styles from "@/styles/App";
 import { AxiosContext } from "@/utils/AxiosContext";
-import { findDataAtom, findingWayDataAtom } from "@/utils/states";
+import { authAtom, findDataAtom, findingWayDataAtom } from "@/utils/states";
 
 const FindingWay = async (authAxios, departure, destination) => {
   try {
@@ -74,11 +77,30 @@ const Home = () => {
     // console.log(JSON.stringify(findingWayData, null, 2));
   }, [findingWayData]);
 
+  const [refreshing, setRefreshing] = useState(false);
+  const handleRefresh = () => {
+    setRefreshing(true);
+    (async () => {
+      // setRefreshing(false);
+    })();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
+
   return (
-    <View>
-      <Title />
-      <Ads />
-      <Select />
+    <View style={styles.fullscreen}>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
+        <Title />
+        <Ads />
+        <Select />
+        {/* <Select />
+        <Select />
+        <Select />
+        <Select /> */}
+        {/* <Button title="테스트 버튼" onPress={buttonClick} /> */}
+      </ScrollView>
+      <Menu />
     </View>
   );
 };

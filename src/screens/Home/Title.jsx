@@ -1,13 +1,26 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import { useRecoilState } from "recoil";
 
 import styles from "@/styles/Home";
+import { authAtom } from "@/utils/states";
 
 const Title = () => {
+  const [auth, setAuth] = useRecoilState(authAtom);
+  const buttonClick = async () => {
+    await AsyncStorage.removeItem("accessToken");
+    await AsyncStorage.removeItem("refreshToken");
+    setAuth({ accessToken: null, refreshToken: null });
+  };
+
   return (
     <View style={styles.title}>
-      <Text style={styles.titleText}>DIMIGO</Text>
-      <Text style={[styles.titleText, styles.titleTextGreen]}>GO</Text>
+      <View style={styles.titleView}>
+        <Text style={styles.titleText}>Dimi</Text>
+        <Text style={[styles.titleText, styles.titleTextGreen]}>GOGO</Text>
+      </View>
+      <TouchableOpacity style={styles.profileView} onPress={buttonClick} />
     </View>
   );
 };
