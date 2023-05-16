@@ -248,6 +248,136 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 500,
   },
+  dateModalInner: {
+    paddingHorizontal: 25,
+    width: "100%",
+  },
+  dateModalDay: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    width: "100%",
+  },
+  dateModalDayTop: {
+    // borderBottomColor: Colors.secondary,
+    // borderBottomWidth: 2,
+    marginVertical: 3,
+    marginTop: 10,
+  },
+  dateModalDayText: {
+    color: Colors.color,
+    fontSize: 14,
+    opacity: 0.3,
+    fontWeight: 600,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dateModalDayDate: {
+    color: Colors.color,
+    fontSize: 14,
+    fontWeight: 500,
+  },
+  dateModalDayDateRed: {
+    color: Colors.red,
+  },
+  dateModalDayDateBlue: {
+    color: Colors.blue,
+  },
+  dateModalDayTouch: {
+    width: "10.14%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 8,
+    marginVertical: 7,
+    marginHorizontal: "2.07%",
+    borderRadius: 100,
+    // backgroundColor: Colors.primary,
+  },
+  dateModalDayMonth: {
+    color: Colors.color,
+    paddingHorizontal: 15,
+    width: "100%",
+    fontSize: 15,
+    fontWeight: 600,
+    paddingVertical: 15,
+  },
+  dateModalDayTouchSelected: {
+    backgroundColor: Colors.primary,
+  },
+  dateModalDayDateWhite: {
+    color: Colors.background,
+  },
+  dateModalDayDateGray: {
+    color: Colors.color,
+    opacity: 0.3,
+  },
+  calendarSwiper: {
+    width: "100%",
+    height: 350,
+    borderColor: Colors.secondary,
+    borderWidth: 2,
+    borderRadius: 5,
+  },
+  dateModalT: {
+    fontSize: 16,
+    fontWeight: 600,
+    color: Colors.color,
+    marginBottom: 3,
+  },
+  dateModalTimeT: {
+    marginTop: 20,
+  },
+  timeScroll: {
+    paddingVertical: 10,
+  },
+  timeText: {
+    color: Colors.color,
+    fontSize: 14,
+    opacity: 0.3,
+    fontWeight: 600,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  timeTextSelect: {
+    opacity: 1,
+    color: Colors.background,
+  },
+  timeView: {
+    borderColor: Colors.secondary,
+    borderWidth: 2,
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  timeViewSelect: {
+    borderColor: Colors.primary,
+    backgroundColor: Colors.primary,
+  },
+  dateModalBtn: {
+    width: "100%",
+    position: "absolute",
+    bottom: 25,
+    paddingHorizontal: 25,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dateModalBtnInner: {
+    width: "100%",
+    backgroundColor: Colors.primary,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 17,
+    borderRadius: 7,
+  },
+  dateModalBtnText: {
+    color: Colors.background,
+    fontSize: 14,
+    fontWeight: 500,
+  },
 });
 
 export default styles;

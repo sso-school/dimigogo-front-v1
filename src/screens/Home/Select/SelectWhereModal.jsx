@@ -18,41 +18,43 @@ const SelectWhereModal = ({ visibleState: [visible, setVisible], type }) => {
   const [search, setSearch] = useState("");
   const [searchList, setSearchList] = useState([]);
 
-  const getSearch = () => {
+  const getSearch = async () => {
     if (!search) {
       setSearchList([]);
       return;
     }
-    (async () => {
-      try {
-        const res = await authAxios.get("/map/search", {
-          params: {
-            q: search,
-          },
-        });
-        const list = res.data.place.map((item) => {
-          return {
-            name: item.name,
-            address: item.new_address || item.address,
-            x: item.lon,
-            y: item.lat,
-          };
-        });
-        console.log(JSON.stringify(list, null, 2));
-        list.length > 0 && setSearchList(list);
-      } catch (e) {
-        console.log(JSON.stringify(e, null, 2));
-        setSearchList([]);
-      }
-    })();
+    try {
+      const res = await authAxios.get("/map/search", {
+        params: {
+          q: search,
+        },
+      });
+      const list = res.data.place.map((item) => {
+        return {
+          name: item.name,
+          address: item.new_address || item.address,
+          x: item.lon,
+          y: item.lat,
+        };
+      });
+      console.log(JSON.stringify(list, null, 2));
+      list.length > 0 && setSearchList(list);
+    } catch (e) {
+      console.log(JSON.stringify(e, null, 2));
+      setSearchList([]);
+    }
   };
-  useEffect(getSearch, [search]);
+  useEffect(() => {
+    getSearch();
+  }, [search]);
 
   const [refreshing, setRefreshing] = useState(false);
   const handleRefresh = () => {
-    setRefreshing(true); // 새로고침 시작
-    getSearch(); // 데이터 가져오기
-    setRefreshing(false); // 새로고침 완료
+    setRefreshing(true);
+    (async () => {
+      await getSearch();
+      setRefreshing(false);
+    })();
   };
 
   const [mapModalVisible, setMapModalVisible] = useState(false);

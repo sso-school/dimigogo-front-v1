@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Platform, StatusBar, View } from "react-native";
 import { useRecoilState } from "recoil";
 
-import Auth from "@/screens/auth";
+import Auth from "@/screens/Auth";
 import Home from "@/screens/Home";
 import { Colors } from "@/styles/colors";
 import { authAtom, fullScreenSizeAtom } from "@/utils/states";

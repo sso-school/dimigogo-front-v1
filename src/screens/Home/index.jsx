@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useContext, useEffect } from "react";
-import { Alert, Button, ScrollView, View } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { Alert, Button, RefreshControl, ScrollView, View } from "react-native";
 import { useRecoilState } from "recoil";
 
 import Ads from "./Ads";
@@ -77,9 +77,20 @@ const Home = () => {
     // console.log(JSON.stringify(findingWayData, null, 2));
   }, [findingWayData]);
 
+  const [refreshing, setRefreshing] = useState(false);
+  const handleRefresh = () => {
+    setRefreshing(true);
+    (async () => {
+      // setRefreshing(false);
+    })();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
+
   return (
     <View style={styles.fullscreen}>
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
         <Title />
         <Ads />
         <Select />

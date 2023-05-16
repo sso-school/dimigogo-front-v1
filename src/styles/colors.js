@@ -6,4 +6,6 @@ export const Colors = {
   boxBackground: "#FBFBFB",
   gray: "#C8DAF6",
   icon: "#B5BBC3",
+  red: "#FF6262",
+  blue: "#5E5AFF",
 };
