@@ -5,7 +5,7 @@ import { useRecoilState } from "recoil";
 
 import SelectMapModal from "./SelectMapModal";
 
-import { SvgIcon, BlackModal, LeftSideModal } from "@/components";
+import { SvgIcon, LeftSideModal } from "@/components";
 import { Colors } from "@/styles/colors";
 import styles from "@/styles/Home";
 import { AxiosContext } from "@/utils/AxiosContext";
@@ -59,7 +59,7 @@ const SelectWhereModal = ({ visibleState: [visible, setVisible], type }) => {
   return (
     <LeftSideModal visibleState={[visible, setVisible]} title={`${type} 선택`}>
       <SelectMapModal visibleState={[mapModalVisible, setMapModalVisible]} type={type} parentsSetVisible={setVisible} />
-      <ScrollView style={styles.selectModalSearchView} contentContainerStyle={{ flex: 1 }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
+      <ScrollView style={styles.selectModalSearchView} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
         <View style={styles.selectModalSearchViewInner}>
           <TextInput
             placeholder={`${type}를 검색해주세요.`}

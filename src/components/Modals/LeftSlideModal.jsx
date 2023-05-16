@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { BackHandler, PanResponder, Pressable, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect } from "react";
+import { Alert, BackHandler, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
 
 import SvgIcon from "@/components/SvgIcon";
@@ -7,22 +7,14 @@ import styles from "@/styles/Modals";
 
 const LeftSideModal = ({ visibleState: [visible, setVisible], title, children, ...props }) => {
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBackPress);
-
-    return () => {
-      backHandler.remove();
-    };
-  }, []);
-
-  const handleBackPress = () => {
-    if (visible) {
+    const backAction = () => {
+      Alert.alert("test");
       setVisible(false);
-      return true; // 이벤트를 소비하여 기본 동작(앱 종료)을 막음
-    }
-
-    return false; // 이벤트를 처리하지 않고 기본 동작 수행
-  };
-
+      return true; // 이벤트 전파 중지
+    };
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+    return () => backHandler.remove(); // 컴포넌트 언마운트 시 이벤트 리스너 제거
+  }, []);
   return (
     <Modal
       isVisible={visible}

@@ -4,7 +4,7 @@ import { Alert, Text, TouchableOpacity, View } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { useRecoilState } from "recoil";
 
-import { LeftSideModal, SvgIcon, TransparentModal } from "@/components";
+import { LeftSideModal } from "@/components";
 import { Colors } from "@/styles/colors";
 import styles from "@/styles/Home";
 import { findDataAtom } from "@/utils/states";
