@@ -78,7 +78,6 @@ const SelectMapModal = ({ visibleState: [visible, setVisible], type, parentsSetV
           />
         </NaverMapView>
       )}
-
       <View style={styles.detailSelectButton}>
         <TouchableOpacity
           style={styles.detailSelectButtonView}
