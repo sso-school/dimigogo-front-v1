@@ -56,6 +56,7 @@ const AxiosProvider = ({ children }) => {
           let originalRequest = {
             ...error.config,
           };
+          authAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return await axios(originalRequest);
         } catch (e) {
