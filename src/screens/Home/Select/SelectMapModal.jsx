@@ -52,34 +52,38 @@ const SelectMapModal = ({ visibleState: [visible, setVisible], type, parentsSetV
           }
           setOutPut(newOutput);
         }}>
-        <Marker
-          coordinate={{
-            latitude: outPut.y,
-            longitude: outPut.x,
-          }}
-        />
-        <Polyline
-          coordinates={[
-            {
-              latitude: outPut.y,
-              longitude: outPut.x,
-            },
-            {
-              latitude: selected.y,
-              longitude: selected.x,
-            },
-          ]}
-          strokeColor={Colors.primary}
-          strokeWidth={3}
-        />
-        <Marker
-          coordinate={{
-            latitude: selected.y,
-            longitude: selected.x,
-          }}
-          title={selected.name}
-          description={selected.address}
-        />
+        {outPut.x && outPut.y && selected.x && selected.y && (
+          <>
+            <Marker
+              coordinate={{
+                latitude: outPut.y,
+                longitude: outPut.x,
+              }}
+            />
+            <Polyline
+              coordinates={[
+                {
+                  latitude: outPut.y,
+                  longitude: outPut.x,
+                },
+                {
+                  latitude: selected.y,
+                  longitude: selected.x,
+                },
+              ]}
+              strokeColor={Colors.primary}
+              strokeWidth={3}
+            />
+            <Marker
+              coordinate={{
+                latitude: selected.y,
+                longitude: selected.x,
+              }}
+              title={selected.name}
+              description={selected.address}
+            />
+          </>
+        )}
       </MapView>
       <View style={styles.detailSelectButton}>
         <TouchableOpacity
