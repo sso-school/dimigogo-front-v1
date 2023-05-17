@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   detailSelectButton: {
     width: "100%",
     position: "absolute",
-    bottom: 0,
+    bottom: 25,
     paddingHorizontal: 25,
   },
   detailSelectButtonView: {

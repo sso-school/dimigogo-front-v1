@@ -37,7 +37,6 @@ const SelectWhereModal = ({ visibleState: [visible, setVisible], type }) => {
           y: item.lat,
         };
       });
-      console.log(JSON.stringify(list, null, 2));
       list.length > 0 && setSearchList(list);
     } catch (e) {
       console.log(JSON.stringify(e, null, 2));
@@ -58,6 +57,7 @@ const SelectWhereModal = ({ visibleState: [visible, setVisible], type }) => {
   };
 
   const [mapModalVisible, setMapModalVisible] = useState(false);
+  console.log("Home > Select > SelectWhereModal");
   return (
     <LeftSideModal visibleState={[visible, setVisible]} title={`${type} 선택`}>
       <SelectMapModal visibleState={[mapModalVisible, setMapModalVisible]} type={type} parentsSetVisible={setVisible} />
@@ -81,7 +81,6 @@ const SelectWhereModal = ({ visibleState: [visible, setVisible], type }) => {
           const m = getDistance({ latitude: _.y, longitude: _.x }, { latitude: here.y, longitude: here.x });
 
           const onPress = () => {
-            console.log("asdf");
             setMapModalVisible(_);
           };
 

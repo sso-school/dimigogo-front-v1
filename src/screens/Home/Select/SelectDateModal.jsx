@@ -50,6 +50,7 @@ const CalendarComp = ({ year, month }) => {
     weeks.push(week);
   }
 
+  console.log("Home > Select > SelectDateModal > CalendarComp");
   return (
     <>
       <View style={[styles.dateModalDay]}>
@@ -94,6 +95,7 @@ const SelectDateModal = ({ visibleState: [visible, setVisible] }) => {
   const [calendarInner, setCalendarInner] = useState([<CalendarComp year={today.getFullYear()} month={today.getMonth() + 1} key="0" />, <CalendarComp year={today.getFullYear()} month={today.getMonth() + 2} key="1" />]);
   const [selectTime, setSelectTime] = useState(today.getHours());
 
+  console.log("Home > Select > SelectDateModal");
   return (
     <LeftSideModal visibleState={[visible, setVisible]} title={"출발 날짜 및 시간 선택"}>
       <View style={styles.dateModalInner}>
