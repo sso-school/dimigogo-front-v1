@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useContext, useEffect, useState } from "react";
-import { Alert, Button, RefreshControl, ScrollView, View } from "react-native";
+import { Alert, Button, RefreshControl, SafeAreaView, ScrollView, View } from "react-native";
 import { useRecoilState } from "recoil";
 
 import Ads from "./Ads";
@@ -44,7 +44,7 @@ const FindingWay = async (authAxios, departure, destination) => {
   }
 };
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const [findData, setFindData] = useRecoilState(findDataAtom);
   const [findingWayData, setFindingWayData] = useRecoilState(findingWayDataAtom);
   const { authAxios } = useContext(AxiosContext);
@@ -94,13 +94,8 @@ const Home = () => {
         <Title />
         <Ads />
         <Select />
-        {/* <Select />
-        <Select />
-        <Select />
-        <Select /> */}
-        {/* <Button title="테스트 버튼" onPress={buttonClick} /> */}
       </ScrollView>
-      <Menu />
+      <Menu navigation={navigation} />
     </View>
   );
 };
