@@ -1,7 +1,8 @@
 import { getDistance } from "geolib";
 import React, { useEffect, useState } from "react";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
-import MapView, { Marker, Polyline } from "react-native-maps";
+// import MapView, { Marker, Polyline } from "react-native-maps";
+import NaverMapView, { Circle, Marker, Path, Polyline, Polygon } from "react-native-nmap";
 import { useRecoilState } from "recoil";
 
 import { LeftSideModal } from "@/components";
@@ -13,6 +14,7 @@ const SelectMapModal = ({ visibleState: [visible, setVisible], type, parentsSetV
   const [selected, setSelected] = [visible, setVisible];
   const [findData, setFindData] = useRecoilState(findDataAtom);
   const [outPut, setOutPut] = useState({});
+  const [dist, setDist] = useState(0);
 
   useEffect(() => {
     if (selected.name) {
@@ -25,66 +27,57 @@ const SelectMapModal = ({ visibleState: [visible, setVisible], type, parentsSetV
     }
   }, [selected]);
 
+  console.log("Home > Select > SelectMapModal");
   return (
     <LeftSideModal visibleState={[visible, setVisible]} title={`${type} 세부 위치 선택`}>
-      <MapView
-        initialRegion={{
-          latitude: selected.y,
-          longitude: selected.x,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
-        }}
-        style={{
-          width: "100%",
-          height: "100%",
-        }}
-        onPress={(e) => {
-          const newOutput = {
-            ...outPut,
-            x: e.nativeEvent.coordinate.longitude,
-            y: e.nativeEvent.coordinate.latitude,
-          };
-          const dist = getDistance({ latitude: newOutput.y, longitude: newOutput.x }, { latitude: selected.y, longitude: selected.x });
-          // console.log(dist);
-          if (dist > 500) {
-            Alert.alert(`500m 이내로 선택해주세요.\n현재 거리: ${dist > 1000 ? `${(dist / 1000).toFixed(2)}km` : `${dist}m`}`);
-            return;
-          }
-          setOutPut(newOutput);
-        }}>
-        {outPut.x && outPut.y && selected.x && selected.y && (
-          <>
-            <Marker
-              coordinate={{
-                latitude: outPut.y,
-                longitude: outPut.x,
-              }}
-            />
-            <Polyline
-              coordinates={[
-                {
-                  latitude: outPut.y,
-                  longitude: outPut.x,
-                },
-                {
-                  latitude: selected.y,
-                  longitude: selected.x,
-                },
-              ]}
-              strokeColor={Colors.primary}
-              strokeWidth={3}
-            />
-            <Marker
-              coordinate={{
-                latitude: selected.y,
-                longitude: selected.x,
-              }}
-              title={selected.name}
-              description={selected.address}
-            />
-          </>
-        )}
-      </MapView>
+      {selected.name && outPut?.name && (
+        <NaverMapView
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+          center={{
+            latitude: selected.y,
+            longitude: selected.x,
+            zoom: 16,
+          }}
+          onMapClick={(e) => {
+            const newOutput = {
+              ...outPut,
+              x: e.longitude,
+              y: e.latitude,
+            };
+            const dists = getDistance({ latitude: newOutput.y, longitude: newOutput.x }, { latitude: selected.y, longitude: selected.x });
+            // console.log(dist);
+            if (dists > 500) {
+              Alert.alert("검색 위치로부터 500m 이내로 선택해주세요.");
+              return;
+            }
+            setDist(dists);
+            setOutPut(newOutput);
+          }}>
+          <Marker
+            coordinate={{
+              latitude: outPut.y,
+              longitude: outPut.x,
+            }}
+            caption={{
+              text: `${type === "출발지" ? "탑승" : "하차"} 위치\n${dist > 1000 ? `${(dist / 1000).toFixed(2)}km` : `${dist}m`}`,
+            }}
+            image={require("@/assets/images/icons/album.png")}
+          />
+          <Marker
+            coordinate={{
+              latitude: selected.y,
+              longitude: selected.x,
+            }}
+            caption={{
+              text: "검색 위치",
+            }}
+            image={require("@/assets/images/icons/launcher_assistant_on.png")}
+          />
+        </NaverMapView>
+      )}
       <View style={styles.detailSelectButton}>
         <TouchableOpacity
           style={styles.detailSelectButtonView}

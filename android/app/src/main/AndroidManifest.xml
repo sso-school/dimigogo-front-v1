@@ -38,7 +38,7 @@
         </intent-filter>
       </activity>
       <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyDlULetokAITy0xBxWcEKdV4zUT3cZfV7s"/>
+        android:name="com.naver.maps.map.CLIENT_ID"
+        android:value="4oiw88adxd" />
     </application>
 </manifest>
