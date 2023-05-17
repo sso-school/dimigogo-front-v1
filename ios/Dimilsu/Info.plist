@@ -33,6 +33,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>NMFClientId</key>
+  <string>4oiw88adxd</string>
 	<key>KAKAO_APP_KEY</key>
 	<string>2868df9d2b059c0658e24980b1518ed2</string>
 	<key>LSApplicationQueriesSchemes</key>

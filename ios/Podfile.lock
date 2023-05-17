@@ -96,6 +96,9 @@ PODS:
   - KakaoSDKUser (2.11.1):
     - KakaoSDKAuth (= 2.11.1)
   - libevent (2.1.12)
+  - NMapsGeometry (1.0.1)
+  - NMapsMap (3.16.2):
+    - NMapsGeometry
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -350,6 +353,9 @@ PODS:
     - glog
   - react-native-maps (1.6.0):
     - React-Core
+  - react-native-nmap (0.0.66):
+    - NMapsMap
+    - React
   - React-perflogger (0.71.6)
   - React-RCTActionSheet (0.71.6):
     - React-Core/RCTActionSheetHeaders (= 0.71.6)
@@ -496,6 +502,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-maps (from `../node_modules/react-native-maps`)
+  - react-native-nmap (from `../node_modules/react-native-nmap`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -533,6 +540,8 @@ SPEC REPOS:
     - KakaoSDKCommon
     - KakaoSDKUser
     - libevent
+    - NMapsGeometry
+    - NMapsMap
     - OpenSSL-Universal
     - SocketRocket
     - YogaKit
@@ -584,6 +593,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-nmap:
+    :path: "../node_modules/react-native-nmap"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -646,6 +657,8 @@ SPEC CHECKSUMS:
   KakaoSDKCommon: 555e1bb46595b842ded01cf7888cc17bbae4e113
   KakaoSDKUser: 08c0a4f40bebdebdf948a9e3d0e44ed5c2754f99
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
+  NMapsGeometry: 53c573ead66466681cf123f99f698dc8071a4b83
+  NMapsMap: aaa64717249b06ae82c3a3addb3a01f0e33100ab
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 5c6fd63b03abb06947d348dadac51c93e3485bd8
@@ -662,6 +675,7 @@ SPEC CHECKSUMS:
   React-jsinspector: d5ce2ef3eb8fd30c28389d0bc577918c70821bd6
   React-logger: 9332c3e7b4ef007a0211c0a9868253aac3e1da82
   react-native-maps: fe40d1b421dd3ac86d2b8f526b2abc994e93a8d9
+  react-native-nmap: cfcc5402746040494c544ea90a6062f49505acdf
   React-perflogger: 43392072a5b867a504e2b4857606f8fc5a403d7f
   React-RCTActionSheet: c7b67c125bebeda9fb19fc7b200d85cb9d6899c4
   React-RCTAnimation: c2de79906f607986633a7114bee44854e4c7e2f5

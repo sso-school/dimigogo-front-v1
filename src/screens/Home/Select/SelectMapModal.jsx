@@ -1,7 +1,8 @@
 import { getDistance } from "geolib";
 import React, { useEffect, useState } from "react";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
-import MapView, { Marker, Polyline } from "react-native-maps";
+// import MapView, { Marker, Polyline } from "react-native-maps";
+import NaverMapView, { Circle, Marker, Path, Polyline, Polygon } from "react-native-nmap";
 import { useRecoilState } from "recoil";
 
 import { LeftSideModal } from "@/components";
@@ -27,7 +28,7 @@ const SelectMapModal = ({ visibleState: [visible, setVisible], type, parentsSetV
 
   return (
     <LeftSideModal visibleState={[visible, setVisible]} title={`${type} 세부 위치 선택`}>
-      <MapView
+      {/* <MapView
         initialRegion={{
           latitude: selected.y,
           longitude: selected.x,
@@ -80,7 +81,63 @@ const SelectMapModal = ({ visibleState: [visible, setVisible], type, parentsSetV
           title={selected.name}
           description={selected.address}
         />
-      </MapView>
+      </MapView> */}
+      <NaverMapView
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+        center={{
+          latitude: selected.y,
+          longitude: selected.x,
+          zoom: 16,
+        }}
+        onMapClick={(e) => {
+          const newOutput = {
+            ...outPut,
+            x: e.longitude,
+            y: e.latitude,
+          };
+          const dist = getDistance({ latitude: newOutput.y, longitude: newOutput.x }, { latitude: selected.y, longitude: selected.x });
+          // console.log(dist);
+          if (dist > 500) {
+            Alert.alert(`500m 이내로 선택해주세요.\n현재 거리: ${dist > 1000 ? `${(dist / 1000).toFixed(2)}km` : `${dist}m`}`);
+            return;
+          }
+          setOutPut(newOutput);
+        }}>
+        {outPut.x && outPut.y && (
+          <>
+            <Marker
+              coordinate={{
+                latitude: outPut.y,
+                longitude: outPut.x,
+              }}
+            />
+            <Polyline
+              coordinates={[
+                {
+                  latitude: outPut.y,
+                  longitude: outPut.x,
+                },
+                {
+                  latitude: selected.y,
+                  longitude: selected.x,
+                },
+              ]}
+              strokeColor={Colors.primary}
+              strokeWidth={3}
+            />
+            <Marker
+              coordinate={{
+                latitude: selected.y,
+                longitude: selected.x,
+              }}
+            />
+          </>
+        )}
+      </NaverMapView>
+
       <View style={styles.detailSelectButton}>
         <TouchableOpacity
           style={styles.detailSelectButtonView}
