@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 import React, { Children, useEffect, useState } from "react";
 import { Platform, SafeAreaView, StatusBar, Text, View } from "react-native";
 import { useRecoilState } from "recoil";

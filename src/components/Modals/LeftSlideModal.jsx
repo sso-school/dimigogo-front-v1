@@ -5,16 +5,7 @@ import Modal from "react-native-modal";
 import SvgIcon from "@/components/SvgIcon";
 import styles from "@/styles/Modals";
 
-const LeftSideModal = ({ visibleState: [visible, setVisible], title, children, ...props }) => {
-  useEffect(() => {
-    const backAction = () => {
-      Alert.alert("test");
-      setVisible(false);
-      return true; // 이벤트 전파 중지
-    };
-    const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
-    return () => backHandler.remove(); // 컴포넌트 언마운트 시 이벤트 리스너 제거
-  }, []);
+const LeftSideModal = ({ visibleState: [visible, setVisible], title, children }) => {
   return (
     <Modal
       isVisible={visible}

@@ -8,6 +8,7 @@ import { useRecoilState } from "recoil";
 import { LeftSideModal } from "@/components";
 import { Colors } from "@/styles/colors";
 import styles from "@/styles/Home";
+import { render } from "@/utils/log";
 import { findDataAtom } from "@/utils/states";
 
 const SelectMapModal = ({ visibleState: [visible, setVisible], type, parentsSetVisible }) => {
@@ -27,7 +28,7 @@ const SelectMapModal = ({ visibleState: [visible, setVisible], type, parentsSetV
     }
   }, [selected]);
 
-  console.log("Home > Select > SelectMapModal");
+  render("Home > Select > SelectMapModal");
   return (
     <LeftSideModal visibleState={[visible, setVisible]} title={`${type} 세부 위치 선택`}>
       {selected.name && outPut?.name && (
@@ -48,7 +49,6 @@ const SelectMapModal = ({ visibleState: [visible, setVisible], type, parentsSetV
               y: e.latitude,
             };
             const dists = getDistance({ latitude: newOutput.y, longitude: newOutput.x }, { latitude: selected.y, longitude: selected.x });
-            // console.log(dist);
             if (dists > 500) {
               Alert.alert("검색 위치로부터 500m 이내로 선택해주세요.");
               return;

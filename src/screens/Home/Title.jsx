@@ -4,6 +4,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useRecoilState } from "recoil";
 
 import styles from "@/styles/Home";
+import { render } from "@/utils/log";
 import { authAtom } from "@/utils/states";
 
 const Title = () => {
@@ -14,6 +15,7 @@ const Title = () => {
     setAuth({ accessToken: null, refreshToken: null });
   };
 
+  render("Home > Title");
   return (
     <View style={styles.title}>
       <View style={styles.titleView}>

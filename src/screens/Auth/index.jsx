@@ -8,15 +8,16 @@ import { useRecoilState } from "recoil";
 import { SvgIcon } from "@/components";
 import styles from "@/styles/Auth";
 import { AxiosContext } from "@/utils/AxiosContext";
-import { authAtom } from "@/utils/states";
+import { render } from "@/utils/log";
+import { authAtom, urlAtom } from "@/utils/states";
 
 const Auth = () => {
   const { publicAxios } = useContext(AxiosContext);
   const [auth, setAuth] = useRecoilState(authAtom);
+  const [url, setUrl] = useRecoilState(urlAtom);
 
   const buttonClick = async () => {
     const kakaoAuthToken = await login();
-    console.log(JSON.stringify(kakaoAuthToken, null, 2));
     const {
       data: { accessToken, refreshToken },
     } = await publicAxios.post("/auth/login", {
@@ -28,8 +29,10 @@ const Auth = () => {
     });
     await AsyncStorage.setItem("accessToken", accessToken);
     await AsyncStorage.setItem("refreshToken", refreshToken);
+    setUrl("Home");
   };
 
+  render("Auth");
   return (
     <View style={styles.authView}>
       <SvgIcon name="Logo" style={styles.logo} width={200} height={200} />

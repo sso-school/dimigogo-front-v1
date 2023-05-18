@@ -9,6 +9,7 @@ import { SvgIcon, LeftSideModal } from "@/components";
 import { Colors } from "@/styles/colors";
 import styles from "@/styles/Home";
 import { AxiosContext } from "@/utils/AxiosContext";
+import { error, render } from "@/utils/log";
 import { hereAtom } from "@/utils/states";
 
 const SelectWhereModal = ({ visibleState: [visible, setVisible], type }) => {
@@ -39,7 +40,7 @@ const SelectWhereModal = ({ visibleState: [visible, setVisible], type }) => {
       });
       list.length > 0 && setSearchList(list);
     } catch (e) {
-      console.log(JSON.stringify(e, null, 2));
+      error(JSON.stringify(e, null, 2));
       setSearchList([]);
     }
   };
@@ -57,7 +58,7 @@ const SelectWhereModal = ({ visibleState: [visible, setVisible], type }) => {
   };
 
   const [mapModalVisible, setMapModalVisible] = useState(false);
-  console.log("Home > Select > SelectWhereModal");
+  render("Home > Select > SelectWhereModal");
   return (
     <LeftSideModal visibleState={[visible, setVisible]} title={`${type} 선택`}>
       <SelectMapModal visibleState={[mapModalVisible, setMapModalVisible]} type={type} parentsSetVisible={setVisible} />
