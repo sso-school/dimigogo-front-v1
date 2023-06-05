@@ -60,7 +60,7 @@ const AxiosProvider = ({ children }) => {
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return await axios(originalRequest);
         } catch (e) {
-          console.log(`e: ${JSON.stringify(e, null, 2)}`);
+          error(`e: ${JSON.stringify(e, null, 2)}`);
           await AsyncStorage.removeItem("accessToken");
           await AsyncStorage.removeItem("refreshToken");
           setAuth({

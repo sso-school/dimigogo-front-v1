@@ -18,9 +18,7 @@ const App = () => {
   return (
     <RecoilRoot>
       <AxiosProvider>
-        <SafeAreaView style={styles.background}>
-          <Main />
-        </SafeAreaView>
+        <Main />
       </AxiosProvider>
     </RecoilRoot>
   );

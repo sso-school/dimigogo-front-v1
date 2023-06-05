@@ -3,6 +3,7 @@ import { Image, Linking, TouchableOpacity, View, Text } from "react-native";
 import Swiper from "react-native-swiper";
 
 import styles from "@/styles/Home";
+import { render } from "@/utils/log";
 import openApp from "@/utils/openApp";
 
 const Ads = () => {
@@ -31,6 +32,8 @@ const Ads = () => {
     const { width, height } = event.nativeEvent.layout;
     setViewSize({ width, height });
   };
+
+  render("Home > Ads");
   return (
     <View style={styles.ads} onLayout={onLayout}>
       <View style={styles.adsInner}>

@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useContext, useEffect, useState } from "react";
-import { Alert, Button, RefreshControl, ScrollView, View } from "react-native";
+import { Alert, RefreshControl, ScrollView, View } from "react-native";
 import { useRecoilState } from "recoil";
 
 import Ads from "./Ads";
@@ -10,7 +10,8 @@ import Title from "./Title";
 import Menu from "@/components/Menu";
 import styles from "@/styles/App";
 import { AxiosContext } from "@/utils/AxiosContext";
-import { authAtom, findDataAtom, findingWayDataAtom } from "@/utils/states";
+import { error, render } from "@/utils/log";
+import { findDataAtom, findingWayDataAtom } from "@/utils/states";
 
 const FindingWay = async (authAxios, departure, destination) => {
   try {
@@ -40,11 +41,11 @@ const FindingWay = async (authAxios, departure, destination) => {
       data: true,
     };
   } catch (e) {
-    console.log(`${JSON.stringify(e, null, 2)}\n${new Date()}`);
+    error(`${JSON.stringify(e, null, 2)}\n${new Date()}`);
   }
 };
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const [findData, setFindData] = useRecoilState(findDataAtom);
   const [findingWayData, setFindingWayData] = useRecoilState(findingWayDataAtom);
   const { authAxios } = useContext(AxiosContext);
@@ -74,7 +75,6 @@ const Home = () => {
       return;
     }
     Alert.alert(`${Math.round(findingWayData.time / 60)}분 ${findingWayData.taxiCoast.toLocaleString()}원`);
-    // console.log(JSON.stringify(findingWayData, null, 2));
   }, [findingWayData]);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -88,19 +88,15 @@ const Home = () => {
     }, 1000);
   };
 
+  render("Home");
   return (
     <View style={styles.fullscreen}>
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
         <Title />
         <Ads />
         <Select />
-        {/* <Select />
-        <Select />
-        <Select />
-        <Select /> */}
-        {/* <Button title="테스트 버튼" onPress={buttonClick} /> */}
       </ScrollView>
-      <Menu />
+      <Menu navigation={navigation} />
     </View>
   );
 };

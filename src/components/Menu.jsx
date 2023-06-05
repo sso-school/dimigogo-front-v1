@@ -8,13 +8,13 @@ import { Colors } from "@/styles/colors";
 import styles from "@/styles/Menu";
 import { urlAtom } from "@/utils/states";
 
-const Menu = () => {
+const Menu = ({ navigation }) => {
   const [url, setUrl] = useRecoilState(urlAtom);
 
   const menuList = [
-    { title: "내 예약", name: "AirplaneTicket", url: "book" },
-    { title: "홈", name: "SensorDoor", url: "home" },
-    { title: "마이페이지", name: "Person", url: "mypage" },
+    { title: "내 예약", name: "AirplaneTicket", url: "Book" },
+    { title: "홈", name: "SensorDoor", url: "Home" },
+    { title: "마이페이지", name: "Person", url: "MyPage" },
   ];
   return (
     <View style={styles.menu}>
@@ -23,6 +23,8 @@ const Menu = () => {
 
         const handlePress = () => {
           // Vibration.vibrate(10);
+          //navigation.navigate(_.url);
+          navigation.replace(_.url);
           setUrl(_.url);
         };
 

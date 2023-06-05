@@ -3,10 +3,9 @@ import { StyleSheet } from "react-native";
 import { Colors } from "@/styles/colors";
 
 const styles = StyleSheet.create({
-  background: {
-    backgroundColor: Colors.background,
-  },
+  background: {},
   fullscreen: {
+    backgroundColor: Colors.background,
     width: "100%",
     height: "100%",
   },

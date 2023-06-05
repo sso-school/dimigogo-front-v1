@@ -8,12 +8,13 @@ import SelectWhereModal from "./SelectWhereModal";
 import { SvgIcon } from "@/components";
 import { Colors } from "@/styles/colors";
 import styles from "@/styles/Home";
+import { log, render } from "@/utils/log";
 import { findDataAtom } from "@/utils/states";
 
 const Select = () => {
   const [findData, setFindData] = useRecoilState(findDataAtom);
   useEffect(() => {
-    console.log(findData);
+    log(findData);
   }, [findData]);
 
   const [isSearch, setIsSearch] = useState(0);
@@ -47,8 +48,9 @@ const Select = () => {
     }
   };
 
-  const cutPoem = (poem) => (poem.length >= 8 ? `${poem.substring(0, 8)}...` : poem);
+  const cutPoem = (_) => (_.length >= 8 ? `${_.substring(0, 8)}...` : _);
 
+  render("Home > Select");
   return (
     <>
       <SelectWhereModal visibleState={[modalStartVisible, setModalStartVisible]} type="출발지" />
@@ -111,7 +113,7 @@ const Select = () => {
         </View>
         <View style={styles.searchView}>
           <TouchableOpacity style={styles.searchButton}>
-            <Text style={styles.searchButtonText}>택시 팟 조회하기</Text>
+            <Text style={styles.searchButtonText}>택시 팟 {!isSearch ? "조회" : "생성"}하기</Text>
           </TouchableOpacity>
         </View>
       </View>

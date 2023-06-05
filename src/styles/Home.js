@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 400,
     marginLeft: 6,
+    color: Colors.color,
   },
   searchView: {
     padding: 10,

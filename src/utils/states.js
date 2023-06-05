@@ -9,7 +9,7 @@ export const authAtom = atom({
 });
 export const urlAtom = atom({
   key: "urlAtom",
-  default: "home",
+  default: "Home",
 });
 
 export const findCreateSelectAtom = atom({
