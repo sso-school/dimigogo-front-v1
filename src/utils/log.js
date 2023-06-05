@@ -2,7 +2,7 @@ let prev = [];
 let prevTime = 0;
 
 export const render = (message) => {
-  const renderLog = true;
+  const renderLog = false;
   if (!renderLog) {
     return;
   }

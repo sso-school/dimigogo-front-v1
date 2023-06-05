@@ -48,7 +48,7 @@ const Select = () => {
     }
   };
 
-  const cutPoem = (poem) => (poem.length >= 8 ? `${poem.substring(0, 8)}...` : poem);
+  const cutPoem = (_) => (_.length >= 8 ? `${_.substring(0, 8)}...` : _);
 
   render("Home > Select");
   return (

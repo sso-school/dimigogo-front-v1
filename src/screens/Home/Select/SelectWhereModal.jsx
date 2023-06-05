@@ -9,7 +9,7 @@ import { SvgIcon, LeftSideModal } from "@/components";
 import { Colors } from "@/styles/colors";
 import styles from "@/styles/Home";
 import { AxiosContext } from "@/utils/AxiosContext";
-import { error, render } from "@/utils/log";
+import { error, log, render } from "@/utils/log";
 import { hereAtom } from "@/utils/states";
 
 const SelectWhereModal = ({ visibleState: [visible, setVisible], type }) => {
@@ -30,6 +30,7 @@ const SelectWhereModal = ({ visibleState: [visible, setVisible], type }) => {
           q: search,
         },
       });
+      log(JSON.stringify(res.data, null, 2));
       const list = res.data.place.map((item) => {
         return {
           name: item.name,
