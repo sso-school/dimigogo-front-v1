@@ -108,7 +108,7 @@ const Select = () => {
         <View style={styles.bottomBorder}>
           <TouchableOpacity style={styles.dateView} onPress={() => setModalDateVisible(true)}>
             <SvgIcon name="CalendarToday" />
-            <Text style={styles.date}>{`${findData.date.year}년 ${findData.date.month}월 ${findData.date.day}일 ${findData.date.hour}시`}</Text>
+            <Text style={styles.date}>{`${findData.date.year}년 ${findData.date.month}월 ${findData.date.day}일 ${findData.date.hour}시 ${findData.date.minute}분`}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.searchView}>

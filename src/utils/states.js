@@ -23,6 +23,7 @@ const todayDate = {
   month: today.getMonth() + 1,
   day: today.getDate(),
   hour: today.getHours(),
+  minute: Math.floor(today.getMinutes() / 5) * 5,
 };
 
 export const findDataAtom = atom({
